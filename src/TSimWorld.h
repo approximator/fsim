@@ -11,7 +11,7 @@
 class TSimWorld : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(const TScreen* screen READ screen NOTIFY screenChanged)
+    Q_PROPERTY(TScreen* screen READ screen NOTIFY screenChanged)
 public:
     enum Roles {
         Name = Qt::UserRole + 1
@@ -24,10 +24,10 @@ public:
 
     Q_INVOKABLE TPoint* getPoint(int index) const;
 
-    const TScreen* screen() const;
+    TScreen* screen() const;
 
 private:
-    TScreen m_Screen;
+    TScreen* m_Screen { nullptr };
     QList<TPoint*> m_Points { };
     QHash<int, QByteArray> m_Roles { };
 

@@ -1,5 +1,7 @@
 #include "TScreen.h"
 
+#include <QDebug>
+
 TScreen::TScreen(QObject *parent) : QObject(parent)
 {
 

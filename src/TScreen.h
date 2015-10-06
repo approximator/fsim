@@ -31,7 +31,7 @@ private:
     int m_Y      = 0;
     int m_Width  = 0;
     int m_Height = 0;
-    int m_Scale  = 0;
+    int m_Scale  = 1;
 
 signals:
     void xChanged();
@@ -43,7 +43,5 @@ signals:
 
 public slots:
 };
-
-Q_DECLARE_METATYPE(TScreen *)
 
 #endif // TSCREEN_H

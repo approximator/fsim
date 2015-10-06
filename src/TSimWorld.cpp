@@ -3,6 +3,10 @@
 TSimWorld::TSimWorld(QObject *parent) :
     QAbstractListModel(parent)
 {
+    qRegisterMetaType<TPoint*>("TPoint*");
+    qRegisterMetaType<TScreen*>("TScreen*");
+
+    m_Screen = new TScreen(this);
     m_Roles.insert(Roles::Name, "name");
 
     m_Points.push_back(new TPoint(0, 10.0, 10.0, this));
@@ -35,9 +39,9 @@ QVariant TSimWorld::data(const QModelIndex &index, int role) const
     }
 }
 
-const TScreen *TSimWorld::screen() const
+TScreen *TSimWorld::screen() const
 {
-    return &m_Screen;
+    return m_Screen;
 }
 
 int TSimWorld::pointsNum() const

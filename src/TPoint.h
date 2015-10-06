@@ -9,7 +9,6 @@
 #include <QFont>
 #include <qmath.h>
 
-class QPainter;
 
 class TPoint : public QObject
 {
@@ -35,7 +34,5 @@ signals:
     void xChanged(qreal);
     void yChanged(qreal);
 };
-
-Q_DECLARE_METATYPE(TPoint *)
 
 #endif // TPOINT_H

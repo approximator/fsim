@@ -13,6 +13,32 @@ Page {
         }
     ]
 
+    World {
+        id: world
+    }
+
+    Canvas {
+        id: canvas
+        anchors.fill: parent
+        property QtObject screen: world.screen
+
+        onPaint: {
+            var ctx = getContext("2d")
+
+            ctx.fillStyle = '#222222';
+            ctx.fillRect(0, 0, width, height)
+
+            var num = world.rowCount()
+            for (var i = 0; i < num; ++i)
+            {
+                var p = world.getPoint(i)
+            }
+        }
+
+        onWidthChanged: screen.width = width
+        onHeightChanged: screen.height = height
+    }
+
     Slider {
         anchors {
             right: parent.right
@@ -25,29 +51,6 @@ Page {
         stepSize: 1
         minimumValue: 50
         maximumValue: 200
-    }
-
-    World {
-        id: world
-    }
-
-    Canvas {
-        id: canvas
-        anchors.fill: parent
-        onPaint: {
-            var ctx = getContext("2d")
-
-            ctx.fillStyle = '#222222';
-            ctx.fillRect(0, 0, width, height)
-
-            var num = world.rowCount()
-            console.log("num = ", num)
-            for (var i = 0; i < num; ++i)
-            {
-                var p = world.getPoint(i)
-                console.log(p.x)
-            }
-        }
     }
 }
 
