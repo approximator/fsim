@@ -16,6 +16,11 @@ HEADERS += \
 
 RESOURCES += qml.qrc
 
+BUILD_TYPE = Release
+CONFIG(debug, debug|release) {
+    BUILD_TYPE = Debug
+}
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
@@ -28,7 +33,7 @@ isEmpty(BUILD_TREE) {
 }
 
 ROOT_DIR     = $$system_path($$PWD)
-SCRIPTS_DIR  = $$system_path(../scripts)
+SCRIPTS_DIR  = $$absolute_path($$system_path(../scripts))
 SOURCE_TREE  = $$system_path($$PWD)
 QML_MATERIAL = $$system_path(../qml-material/modules)
 
@@ -52,15 +57,9 @@ RCC_DIR = rccdir
 DEFINES += QML_RELATIVE_PATH=\\\"$$QML_RELATIVE_PATH\\\"
 DEFINES += PLUGINS_PATH=\\\"$$PLUGINS_RELATIVE_PATH\\\"
 
-#deploy.commands = python -u $$system_path(\"$$SCRIPTS_DIR/load_qml_modules.py\") \
-#                                      $$system_path(\"$$ROOT_DIR/Gui/qml\") \
-#                                      \"$$INSTALL_QML_MODULES_PATH\"
-#QMAKE_EXTRA_TARGETS += deploy
-
 qml_material_modules.path = $$INSTALL_QML_MODULES_PATH
 qml_material_modules.files = $$QML_MATERIAL/*
 INSTALLS += qml_material_modules
 
-# Default rules for deployment.
 include(deployment.pri)
 

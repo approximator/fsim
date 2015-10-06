@@ -8,6 +8,12 @@
 
 int main(int argc, char *argv[])
 {
+    // Add path to search for Qt plugins
+    QString pluginsPaths = QString("%1/%2").arg(
+                QFileInfo(argv[0]).dir().path(),
+                PLUGINS_PATH);
+    QCoreApplication::addLibraryPath(pluginsPaths);
+
     QGuiApplication app(argc, argv);
 
     // Set up settings
