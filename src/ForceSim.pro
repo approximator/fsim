@@ -32,20 +32,20 @@ isEmpty(BUILD_TREE) {
     BUILD_TREE = $$system_path($$BUILD_TREE)
 }
 
-ROOT_DIR     = $$system_path($$PWD)
-SCRIPTS_DIR  = $$absolute_path($$system_path(../scripts))
-SOURCE_TREE  = $$system_path($$PWD)
-QML_MATERIAL = $$system_path(../qml-material/modules)
+ROOT_DIR     = $$system_path($$absolute_path($$PWD))
+SCRIPTS_DIR  = $$system_path($$absolute_path(../scripts))
+SOURCE_TREE  = $$system_path($$absolute_path($$PWD))
+QML_MATERIAL = $$system_path($$absolute_path(../qml-material/modules))
 
 APP_TARGET               = forceSim
-INSTALL_DIR              = $$system_path($$BUILD_TREE/ForcesSimulation)
-DATA_DIR                 = $$system_path($$INSTALL_DIR/data)
-INSTALL_LIBRARY_PATH     = $$system_path($$DATA_DIR/lib)
-INSTALL_PLUGINS_DIR      = $$system_path($$DATA_DIR/plugins)
-INSTALL_QML_MODULES_PATH = $$system_path($$DATA_DIR/qml)
+INSTALL_DIR              = $$system_path($$clean_path($$BUILD_TREE/ForcesSimulation))
+DATA_DIR                 = $$system_path($$clean_path($$INSTALL_DIR/data))
+INSTALL_LIBRARY_PATH     = $$system_path($$clean_path($$DATA_DIR/lib))
+INSTALL_PLUGINS_DIR      = $$system_path($$clean_path($$DATA_DIR/plugins))
+INSTALL_QML_MODULES_PATH = $$system_path($$clean_path($$DATA_DIR/qml))
 
-QML_RELATIVE_PATH = $$relative_path($$INSTALL_QML_MODULES_PATH, $$INSTALL_PATH)
-PLUGINS_RELATIVE_PATH = $$relative_path($$INSTALL_PLUGINS_DIR, $$INSTALL_PATH)
+QML_RELATIVE_PATH = $$clean_path($$relative_path($$INSTALL_QML_MODULES_PATH, $$INSTALL_DIR))
+PLUGINS_RELATIVE_PATH = $$clean_path($$relative_path($$INSTALL_PLUGINS_DIR, $$INSTALL_DIR))
 
 target.path = $$BUILD_TREE
 TARGET = $$APP_TARGET
@@ -60,6 +60,27 @@ DEFINES += PLUGINS_PATH=\\\"$$PLUGINS_RELATIVE_PATH\\\"
 qml_material_modules.path = $$INSTALL_QML_MODULES_PATH
 qml_material_modules.files = $$QML_MATERIAL/*
 INSTALLS += qml_material_modules
+
+
+unix {
+    # enable additional warnings
+    QMAKE_CXXFLAGS += -Wall -Wextra -pedantic -Weffc++ -Wold-style-cast
+
+    # get rid of Qt related warnings
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]" -isystem "$$[QT_INSTALL_HEADERS]/QtWidgets"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtXml" -isystem "$$[QT_INSTALL_HEADERS]/QtGui"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtCore"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtQml"
+}
+
+message(ROOT_DIR: $$ROOT_DIR)
+message(SCRIPTS_DIR: $$SCRIPTS_DIR)
+message(SOURCE_TREE: $$SOURCE_TREE)
+message(QML_MATERIAL: $$QML_MATERIAL)
+message(INSTALL_DIR: $$INSTALL_DIR)
+message(INSTALL_QML_MODULES_PATH: $$INSTALL_QML_MODULES_PATH)
+message(QML_RELATIVE_PATH: $$QML_RELATIVE_PATH)
+message(PLUGINS_RELATIVE_PATH: $$PLUGINS_RELATIVE_PATH)
 
 include(deployment.pri)
 

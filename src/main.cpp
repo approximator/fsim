@@ -1,3 +1,12 @@
+/*!
+ * @file main.cpp
+ *
+ * @brief Firces simulation entry point
+ *
+ * @author Oleksii Aliakin (alex@nls.la)
+ * @date Created Sep 05, 2015
+ * @date Modified Sep 07, 2015
+ */
 
 #include "TSimWorld.h"
 
@@ -28,7 +37,7 @@ int main(int argc, char *argv[])
                 QML_RELATIVE_PATH);
     engine.addImportPath(qmlFilesPath);
     qmlRegisterType<TSimWorld>("sim.world", 1, 0, "World");
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     return app.exec();
 }

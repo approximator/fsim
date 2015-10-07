@@ -1,3 +1,13 @@
+/*!
+ * @file TScreen.cpp
+ *
+ * @brief User screen
+ *
+ * @author Oleksii Aliakin (alex@nls.la)
+ * @date Created Sep 05, 2015
+ * @date Modified Sep 07, 2015
+ */
+
 #include "TScreen.h"
 
 #include <QDebug>
@@ -27,9 +37,19 @@ int TScreen::height() const
     return m_Height;
 }
 
-int TScreen::scale() const
+qreal TScreen::scale() const
 {
     return m_Scale;
+}
+
+int TScreen::offsetX() const
+{
+    return m_OffsetX;
+}
+
+int TScreen::offsetY() const
+{
+    return m_OffsetY;
 }
 
 void TScreen::setX(int _x)
@@ -70,4 +90,20 @@ void TScreen::setScale(int _scale)
         return;
     m_Scale = _scale;
     emit scaleChanged();
+}
+
+void TScreen::setOffsetX(int _offsetX)
+{
+    if (m_OffsetX == _offsetX)
+        return;
+    m_OffsetX = _offsetX;
+    emit offsetXChanged();
+}
+
+void TScreen::setOffsetY(int _offsetY)
+{
+    if (m_OffsetY == _offsetY)
+        return;
+    m_OffsetY = _offsetY;
+    emit offsetYChanged();
 }

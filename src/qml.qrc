@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>CanvasPage.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/CanvasPage.qml</file>
     </qresource>
 </RCC>
