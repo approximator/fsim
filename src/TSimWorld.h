@@ -47,6 +47,7 @@ public:
 
     Q_INVOKABLE void addPoint(qreal _x, qreal _y);
     Q_INVOKABLE void update();
+    Q_INVOKABLE QVector2D forceAt(qreal _x, qreal _y);
 
     TScreen* screen() const;
     TPoint* selectedPoint() const;

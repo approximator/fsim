@@ -38,6 +38,34 @@ Page {
             ctx.fillStyle = '#222222';
             ctx.fillRect(0, 0, width, height)
 
+            var interval = 10
+            for (var i = 0; i < width; i += interval)
+            {
+                for (var j = 0; j < width; j += interval)
+                {
+                    var force = world.forceAt(world.xScreenToWorld(i), world.yScreenToWorld(j))
+
+                    var startX = i
+                    var startY = j
+                    var endX = startX + force.x / 50
+                    var endY = startY + force.y / 50
+
+                    var w = 4
+                    var h = 5
+                    var normX = endX - startX
+                    var normY = startY - endY
+
+
+                    ctx.beginPath()
+                    ctx.moveTo(startX, startY)
+                    ctx.lineTo(endX, endY)
+                    ctx.lineWidth = 0.5
+                    ctx.strokeStyle = '#00cccc'
+                    ctx.stroke()
+                    ctx.closePath()
+                }
+            }
+
             var num = world.rowCount()
             for (var i = 0; i < num; ++i)
             {

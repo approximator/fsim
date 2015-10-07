@@ -212,3 +212,38 @@ void TSimWorld::update()
     }
 }
 
+QVector2D TSimWorld::forceAt(qreal _x, qreal _y)
+{
+    QVector2D pos = QVector2D(_x, _y);
+    QVector2D force = QVector2D(0, 0);
+    for (QList<TPoint*>::iterator j = m_Points.begin(), j_end = m_Points.end(); j != j_end; ++j)
+    {
+        if (pos == (*j)->position())
+            continue;
+
+        const qreal distance = pos.distanceToPoint((*j)->position()); // distance
+
+        if (distance < 0.5)
+            return QVector2D(0, 0);
+
+        QVector2D Fij = ((*j)->position() - pos).normalized();  // Force direction
+
+        const qreal gravityForce = 400;
+        const qreal criticalRadius = (*j)->criticalRadius();
+
+        const qreal attractiveForce = 1 * (*j)->mass() / qPow(distance, 2);                 //        mi * mj / d^2
+        const qreal repulsiveForce = criticalRadius * 1 * (*j)->mass() / qPow(distance, 3); //  Rcr * mi * mj / d^3
+
+        const qreal forceMagnitude = gravityForce * (attractiveForce - repulsiveForce);
+
+        Fij *= forceMagnitude;     // forceDirection * forceMagnitude
+
+        force += Fij; // Fi = Fi + Fij
+    }
+
+    if (force.length() > 400)
+        force = force.normalized() * 400;
+
+    return force;
+}
+
