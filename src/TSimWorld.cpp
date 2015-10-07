@@ -53,6 +53,40 @@ TScreen *TSimWorld::screen() const
     return m_Screen;
 }
 
+TPoint *TSimWorld::selectedPoint() const
+{
+    return m_SelectedPoint;
+}
+
+qreal TSimWorld::damperCoeff() const
+{
+    return m_DamperCoeff;
+}
+
+void TSimWorld::setSelectedPoint(TPoint *_point)
+{
+    if (m_SelectedPoint == _point)
+        return;
+
+    for (const auto& point : m_Points)
+        point->setSelected(false);
+
+    if (_point)
+        _point->setSelected(true);
+
+    m_SelectedPoint = _point;
+    emit selectedPointChanged();
+}
+
+void TSimWorld::setDamperCoeff(qreal _coeff)
+{
+    if (m_DamperCoeff == _coeff)
+        return;
+
+    m_DamperCoeff = _coeff;
+    emit damperCoeffChanged();
+}
+
 int TSimWorld::pointsNum() const
 {
     return m_Points.size();
@@ -66,6 +100,15 @@ QHash<int, QByteArray> TSimWorld::roleNames() const
 TPoint *TSimWorld::getPoint(int index) const
 {
     return m_Points.at(index);
+}
+
+TPoint *TSimWorld::getPointAt(qreal _x, qreal _y) const
+{
+    const qreal eps = 10 / m_Screen->scale();
+    for (const auto &point : m_Points)
+        if (std::fabs(point->x() - _x) < eps && std::fabs(point->y() - _y) < eps)
+            return point;
+    return nullptr;
 }
 
 qreal TSimWorld::pointXScreenPos(int index) const
@@ -115,6 +158,9 @@ inline qreal rungeKutta(const qreal h, const qreal val)
 
 void TSimWorld::update()
 {
+    if (m_SimPause)
+        return;
+
     // Update forces and positions
     for (auto i = m_Points.begin(), ee = m_Points.end(); i != ee; ++i)
     {

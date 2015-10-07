@@ -20,6 +20,9 @@ class TPoint : public QObject
     Q_OBJECT
     Q_PROPERTY(qreal x READ x WRITE setX NOTIFY xChanged)
     Q_PROPERTY(qreal y READ y WRITE setY NOTIFY yChanged)
+    Q_PROPERTY(qreal id READ id NOTIFY idChanged)
+    Q_PROPERTY(bool fixed READ fixed WRITE setFixed NOTIFY fixedChanged)
+    Q_PROPERTY(qreal mass READ mass WRITE setMass NOTIFY massChanged)
 public:
     explicit TPoint(const uint id, const qreal _x, const qreal _y, QObject *parent = 0);
 
@@ -37,6 +40,10 @@ public:
     void setForce(const QVector2D& force);
     void setAcceleration(const qreal _x, const qreal _y);
     void setSpeed(const qreal _x, const qreal _y);
+    void setSelected(bool _selected);
+    void setFixed(bool _fixed);
+    void setMass(qreal _mass);
+
 
 public slots:
     void setX(const qreal x);
@@ -53,10 +60,14 @@ private:
 
     bool      m_IsObstacle { false };
     bool      m_Fixed      { false };
+    bool      m_Selected   { false };
 
 signals:
-    void xChanged(qreal);
-    void yChanged(qreal);
+    void xChanged();
+    void yChanged();
+    void idChanged();
+    void fixedChanged();
+    void massChanged();
 };
 
 #endif // TPOINT_H

@@ -22,6 +22,9 @@ class TSimWorld : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(TScreen* screen READ screen NOTIFY screenChanged)
+    Q_PROPERTY(TPoint* selectedPoint READ selectedPoint WRITE setSelectedPoint NOTIFY selectedPointChanged)
+    Q_PROPERTY(bool simPause MEMBER m_SimPause)
+    Q_PROPERTY(qreal damperCoeff READ damperCoeff WRITE setDamperCoeff NOTIFY damperCoeffChanged)
 public:
     enum Roles {
         Name = Qt::UserRole + 1
@@ -33,6 +36,7 @@ public:
     Q_INVOKABLE QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE TPoint* getPoint(int index) const;
+    Q_INVOKABLE TPoint* getPointAt(qreal _x, qreal _y) const;
     Q_INVOKABLE qreal pointXScreenPos(int index) const;
     Q_INVOKABLE qreal pointYScreenPos(int index) const;
 
@@ -45,6 +49,10 @@ public:
     Q_INVOKABLE void update();
 
     TScreen* screen() const;
+    TPoint* selectedPoint() const;
+    qreal damperCoeff() const;
+    void setSelectedPoint(TPoint* _point);
+    void setDamperCoeff(qreal _coeff);
 
 private:
     TSimWorld(const TSimWorld& other);
@@ -52,13 +60,17 @@ private:
 
     TScreen*               m_Screen { nullptr };
     QList<TPoint*>         m_Points { };
+    TPoint*                m_SelectedPoint { nullptr };
     QHash<int, QByteArray> m_Roles  { };
+    bool                   m_SimPause { false };
 
     // world parameters
     qreal m_DamperCoeff { 400 };
 
 signals:
     void screenChanged();
+    void selectedPointChanged();
+    void damperCoeffChanged();
 
 public slots:
 };

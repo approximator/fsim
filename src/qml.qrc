@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>qml/main.qml</file>
         <file>qml/CanvasPage.qml</file>
+        <file>qml/LabeledTextEdit.qml</file>
     </qresource>
 </RCC>

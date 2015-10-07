@@ -103,4 +103,25 @@ void TPoint::setSpeed(const qreal _x, const qreal _y)
     m_Speed.setY(_y);
 }
 
+void TPoint::setSelected(bool _selected)
+{
+    m_Selected = _selected;
+}
+
+void TPoint::setFixed(bool _fixed)
+{
+    if (m_Fixed == _fixed)
+        return;
+    m_Fixed = _fixed;
+    emit fixedChanged();
+}
+
+void TPoint::setMass(qreal _mass)
+{
+    if (m_Mass == _mass)
+        return;
+    m_Mass = _mass;
+    emit massChanged();
+}
+
 
