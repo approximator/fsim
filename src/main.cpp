@@ -5,22 +5,20 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 05, 2015
- * @date Modified Sep 07, 2015
+ * @date Modified Feb 05, 2016
  */
 
 #include "TSimWorld.h"
 
-#include <QSettings>
 #include <QGuiApplication>
-#include <QtQml>
 #include <QQmlApplicationEngine>
+#include <QSettings>
+#include <QtQml>
 
 int main(int argc, char *argv[])
 {
     // Add path to search for Qt plugins
-    QString pluginsPaths = QString("%1/%2").arg(
-                QFileInfo(argv[0]).dir().path(),
-                FSIM_PLUGINS_PATH);
+    QString pluginsPaths = QString("%1/%2").arg(QFileInfo(argv[0]).dir().path(), FSIM_PLUGINS_PATH);
     QCoreApplication::addLibraryPath(pluginsPaths);
 
     QGuiApplication app(argc, argv);
@@ -32,11 +30,10 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    QString qmlFilesPath = QString("%1/%2").arg(
-                QCoreApplication::applicationDirPath(),
-                FSIM_QML_MODULES_PATH);
+    QString qmlFilesPath = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), FSIM_QML_MODULES_PATH);
     engine.addImportPath(qmlFilesPath);
     qmlRegisterType<TSimWorld>("sim.world", 1, 0, "World");
+    qRegisterMetaType<TPointsModel *>("TPointsModel*");
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     return app.exec();

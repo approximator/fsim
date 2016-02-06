@@ -17,7 +17,7 @@ Page {
 
     World {
         id: world
-        simPause: checkBoxPause.checked
+        simPaused: checkBoxPause.checked
         onSelectedPointChanged: {
             sidebar.selectedPoint = selectedPoint
         }
@@ -38,35 +38,7 @@ Page {
             ctx.fillStyle = '#222222';
             ctx.fillRect(0, 0, width, height)
 
-            var interval = 10
-            for (var i = 0; i < width; i += interval)
-            {
-                for (var j = 0; j < width; j += interval)
-                {
-                    var force = world.forceAt(world.xScreenToWorld(i), world.yScreenToWorld(j))
-
-                    var startX = i
-                    var startY = j
-                    var endX = startX + force.x / 50
-                    var endY = startY + force.y / 50
-
-                    var w = 4
-                    var h = 5
-                    var normX = endX - startX
-                    var normY = startY - endY
-
-
-                    ctx.beginPath()
-                    ctx.moveTo(startX, startY)
-                    ctx.lineTo(endX, endY)
-                    ctx.lineWidth = 0.5
-                    ctx.strokeStyle = '#00cccc'
-                    ctx.stroke()
-                    ctx.closePath()
-                }
-            }
-
-            var num = world.rowCount()
+            var num = world.model.rowCount()
             for (var i = 0; i < num; ++i)
             {
                 ctx.save()
@@ -77,7 +49,7 @@ Page {
                 ctx.translate(x, y)
                 ctx.arc(0, 0, 10, 0, 2 * Math.PI, false)
                 ctx.fillStyle = 'green'
-                if (world.getPoint(i) === world.selectedPoint)
+                if (world.model.get(i) === world.selectedPoint)
                     ctx.fillStyle = 'yellow'
                 ctx.fill()
                 ctx.lineWidth = 5
@@ -122,18 +94,16 @@ Page {
             }
 
             onDoubleClicked: {
-                world.addPoint(world.xScreenToWorld(mouse.x), world.yScreenToWorld(mouse.y))
+                world.addPoint(world.xToWorld(mouse.x), world.yToWorld(mouse.y))
             }
 
             onClicked: {
-                var point = world.getPointAt(world.xScreenToWorld(mouse.x), world.yScreenToWorld(mouse.y))
+                var point = world.getPointAt(world.xToWorld(mouse.x), world.yToWorld(mouse.y))
                 if (point)
                     world.selectedPoint = point
             }
         }
     }
-
-
 
     Timer {
         id: timer;
@@ -169,15 +139,15 @@ Page {
                 id: labeledEditDamper
                 label: "Damper"
                 labelWidth: Units.dp(80)
-                value: world.damperCoeff
+                value: world.damperCoefficient
                 onEditFinished: {
-                    world.damperCoeff = parseInt(new_text)
+                    world.damperCoefficient = parseInt(new_text)
                 }
             }
 
             Label {
                 style: "headline"
-                text: "Selected point: " + (sidebar.selectedPoint ? sidebar.selectedPoint.id : "")
+                text: "Selected point: " + (sidebar.selectedPoint ? sidebar.selectedPoint.point_id : "")
                 color: Theme.dark.textColor
             }
 

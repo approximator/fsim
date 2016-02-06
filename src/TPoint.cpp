@@ -5,64 +5,30 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 05, 2015
- * @date Modified Sep 07, 2015
+ * @date Modified Feb 06, 2016
  */
 
 #include "TPoint.h"
 
-TPoint::TPoint(const uint id, const qreal _x, const qreal _y, QObject *parent):
-    QObject(parent),
-    m_Id(id),
-    m_Position(_x, _y)
-{
+#include <QDebug>
 
+TPoint::TPoint(const uint _id, const qreal _x, const qreal _y, QObject *parent)
+    : QObject(parent)
+    , m_point_id(_id)
+    , m_x(_x)
+    , m_y(_y)
+    , m_mass(20.0)
+    , m_fixed(false)
+    , m_obstacle(false)
+    , m_force()
+    , m_criticalRadius(1)
+{
+    qDebug() << "Added point [" << point_id() << "]: " << _x << ", " << _y;
 }
 
-void TPoint::setX(const qreal x)
+TPoint::~TPoint()
 {
-    m_Position.setX(x);
-    // qDebug() << id() << "  x = " << x;
-}
-
-void TPoint::setY(const qreal y)
-{
-    m_Position.setY(y);
-    // qDebug() << id() << "  y = " << y;
-}
-
-uint TPoint::id() const
-{
-    return m_Id;
-}
-
-qreal TPoint::x() const
-{
-    return m_Position.x();
-}
-
-qreal TPoint::y() const
-{
-    return m_Position.y();
-}
-
-qreal TPoint::mass() const
-{
-    return m_Mass;
-}
-
-bool TPoint::fixed() const
-{
-    return m_Fixed;
-}
-
-bool TPoint::isObstacle() const
-{
-    return m_IsObstacle;
-}
-
-QVector2D TPoint::force() const
-{
-    return m_Force;
+    qDebug() << "Deleted point: " << point_id();
 }
 
 QVector2D TPoint::acceleration() const
@@ -77,51 +43,17 @@ QVector2D TPoint::speed() const
 
 QVector2D TPoint::position() const
 {
-    return m_Position;
+    return QVector2D(m_x, m_y);
 }
 
-qreal TPoint::criticalRadius() const
-{
-    return m_CriticalRadius;
-}
-
-void TPoint::setForce(const QVector2D &force)
-{
-    m_Force = force;
-    // qDebug() << id() << "  f = " << force;
-}
-
-void TPoint::setAcceleration(const qreal _x, const qreal _y)
+void TPoint::set_acceleration(const qreal _x, const qreal _y)
 {
     m_Acceleration.setX(_x);
     m_Acceleration.setY(_y);
 }
 
-void TPoint::setSpeed(const qreal _x, const qreal _y)
+void TPoint::set_speed(const qreal _x, const qreal _y)
 {
     m_Speed.setX(_x);
     m_Speed.setY(_y);
 }
-
-void TPoint::setSelected(bool _selected)
-{
-    m_Selected = _selected;
-}
-
-void TPoint::setFixed(bool _fixed)
-{
-    if (m_Fixed == _fixed)
-        return;
-    m_Fixed = _fixed;
-    emit fixedChanged();
-}
-
-void TPoint::setMass(qreal _mass)
-{
-    if (m_Mass == _mass)
-        return;
-    m_Mass = _mass;
-    emit massChanged();
-}
-
-
