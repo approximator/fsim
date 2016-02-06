@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
     QCoreApplication::addLibraryPath(pluginsPaths);
 
     QGuiApplication app(argc, argv);
+    qDebug() << "Looking for plugins in " << app.libraryPaths();
 
     // Set up settings
     app.setOrganizationName("ForcesSimulator");
