@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 05, 2015
- * @date Modified Feb 05, 2016
+ * @date Modified Feb 07, 2016
  */
 
 #ifndef SIMWORLD_H
@@ -28,22 +28,22 @@ class TSimWorld : public QObject
     QML_READONLY_VAR_PROPERTY(TScreen *, screen)
     QML_WRITABLE_VAR_PROPERTY(TPoint *, selectedPoint)
     QML_WRITABLE_VAR_PROPERTY(bool, simPaused)
+    QML_WRITABLE_VAR_PROPERTY(qreal, gravity)
     QML_WRITABLE_VAR_PROPERTY(qreal, damperCoefficient)
 
 public:
     explicit TSimWorld(QObject *parent = 0);
 
     Q_INVOKABLE TPoint *getPointAt(qreal _x, qreal _y) const;
-    Q_INVOKABLE qreal pointXScreenPos(int index) const;
-    Q_INVOKABLE qreal pointYScreenPos(int index) const;
 
     Q_INVOKABLE qreal xToScreen(qreal xPos) const;
     Q_INVOKABLE qreal yToScreen(qreal yPos) const;
     Q_INVOKABLE qreal xToWorld(qreal xPos) const;
     Q_INVOKABLE qreal yToWorld(qreal yPos) const;
 
-    Q_INVOKABLE void addPoint(qreal _x, qreal _y);
+    Q_INVOKABLE TPoint *addPoint(qreal _x, qreal _y);
     Q_INVOKABLE void update();
+    Q_INVOKABLE void clean();
     Q_INVOKABLE QVector2D forceAt(qreal _x, qreal _y);
 
 private:

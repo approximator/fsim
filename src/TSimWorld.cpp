@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 05, 2015
- * @date Modified Feb 05, 2016
+ * @date Modified Feb 07, 2016
  */
 
 #include "TSimWorld.h"
@@ -18,7 +18,8 @@ TSimWorld::TSimWorld(QObject *parent)
     , m_screen(new TScreen(this))
     , m_selectedPoint(nullptr)
     , m_simPaused(false)
-    , m_damperCoefficient(300)
+    , m_gravity(1000)
+    , m_damperCoefficient(5000)
 {
     qRegisterMetaType<TPoint *>("TPoint*");
     qRegisterMetaType<TScreen *>("TScreen*");
@@ -32,16 +33,6 @@ TPoint *TSimWorld::getPointAt(qreal _x, qreal _y) const
             && std::fabs(yToScreen((*point)->y()) - yToScreen(_y)) < eps)
             return (*point);
     return nullptr;
-}
-
-qreal TSimWorld::pointXScreenPos(int index) const
-{
-    return xToScreen(m_model->at(index)->x());
-}
-
-qreal TSimWorld::pointYScreenPos(int index) const
-{
-    return yToScreen(m_model->at(index)->y());
 }
 
 qreal TSimWorld::xToScreen(qreal xPos) const
@@ -64,9 +55,11 @@ qreal TSimWorld::yToWorld(qreal yPos) const
     return (m_screen->height() - yPos + m_screen->offsetY()) / m_screen->scale();
 }
 
-void TSimWorld::addPoint(qreal _x, qreal _y)
+TPoint *TSimWorld::addPoint(qreal _x, qreal _y)
 {
-    m_model->append(new TPoint(m_model->count(), _x, _y, m_model));
+    auto point = new TPoint(m_model->count(), _x, _y, m_model);
+    m_model->append(point);
+    return point;
 }
 
 inline qreal rungeKutta(const qreal h, const qreal val)
@@ -90,13 +83,15 @@ void TSimWorld::update()
         if (point->fixed())
             continue;
 
-        for (auto j = i + 1; j != ee; ++j) {
+        for (auto j = m_model->constBegin(); j != ee; ++j) {
             TPoint *otherPoint = (*j);
+            if (point == otherPoint) {
+                continue;
+            }
 
             const qreal distance = point->position().distanceToPoint(otherPoint->position()); // distance
             QVector2D Fij        = (otherPoint->position() - point->position()).normalized(); // Force direction
 
-            const qreal gravityForce   = 800;
             const qreal criticalRadius = (point->criticalRadius() + otherPoint->criticalRadius());
 
             qreal attractiveForce = 0;
@@ -105,10 +100,9 @@ void TSimWorld::update()
 
             const qreal repulsiveForce
                 = criticalRadius * point->mass() * otherPoint->mass() / qPow(distance, 3); //  Rcr * mi * mj / d^3
-            const qreal forceMagnitude = gravityForce * (attractiveForce - repulsiveForce);
+            const qreal forceMagnitude = gravity() * (attractiveForce - repulsiveForce);
             Fij *= forceMagnitude;                  // forceDirection * forceMagnitude
             point->set_force(point->force() + Fij); // Fi = Fi + Fij
-            otherPoint->set_force(otherPoint->force() - Fij);
         }
 
         // Update point position
@@ -128,6 +122,11 @@ void TSimWorld::update()
     }
 }
 
+void TSimWorld::clean()
+{
+    m_model->clear();
+}
+
 QVector2D TSimWorld::forceAt(qreal _x, qreal _y)
 {
     QVector2D pos   = QVector2D(_x, _y);
@@ -143,21 +142,13 @@ QVector2D TSimWorld::forceAt(qreal _x, qreal _y)
 
         QVector2D Fij = ((*j)->position() - pos).normalized(); // Force direction
 
-        const qreal gravityForce   = 400;
-        const qreal criticalRadius = (*j)->criticalRadius();
-
+        const qreal criticalRadius  = (*j)->criticalRadius();
         const qreal attractiveForce = 1 * (*j)->mass() / qPow(distance, 2);                  //        mi * mj / d^2
         const qreal repulsiveForce  = criticalRadius * 1 * (*j)->mass() / qPow(distance, 3); //  Rcr * mi * mj / d^3
-
-        const qreal forceMagnitude = gravityForce * (attractiveForce - repulsiveForce);
-
+        const qreal forceMagnitude  = gravity() * (attractiveForce - repulsiveForce);
         Fij *= forceMagnitude; // forceDirection * forceMagnitude
-
-        force += Fij; // Fi = Fi + Fij
+        force += Fij;          // Fi = Fi + Fij
     }
 
-    if (force.length() > 400)
-        force = force.normalized() * 400;
-
-    return force;
+    return force.length() > 400 ? force.normalized() * 400 : force;
 }

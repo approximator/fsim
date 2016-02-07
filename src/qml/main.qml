@@ -1,5 +1,5 @@
 import QtQuick 2.4
-import Material 0.1
+import Material 0.2
 import Qt.labs.settings 1.0
 
 ApplicationWindow {
@@ -24,13 +24,11 @@ ApplicationWindow {
 
     width: 1280
     height: 720
+    minimumWidth: 400
+    minimumHeight: 300
     visible: true
 
-    CanvasPage {
-        id: startpage
-    }
-
-    initialPage: startpage
+    initialPage: CanvasPage { }
 
     Settings {
         property alias x: mainWindow.x

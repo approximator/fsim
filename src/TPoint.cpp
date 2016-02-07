@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 05, 2015
- * @date Modified Feb 06, 2016
+ * @date Modified Feb 07, 2016
  */
 
 #include "TPoint.h"
@@ -17,7 +17,7 @@ TPoint::TPoint(const uint _id, const qreal _x, const qreal _y, QObject *parent)
     , m_point_id(_id)
     , m_x(_x)
     , m_y(_y)
-    , m_mass(20.0)
+    , m_mass(80.0)
     , m_fixed(false)
     , m_obstacle(false)
     , m_force()

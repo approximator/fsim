@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 05, 2015
- * @date Modified Feb 06, 2016
+ * @date Modified Feb 07, 2016
  */
 
 #ifndef TPOINT_H
