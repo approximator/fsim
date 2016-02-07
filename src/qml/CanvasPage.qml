@@ -27,7 +27,8 @@ Page {
     ]
 
     property var configurations: [
-        "Blank", "Two points", "Three points", "Four points"
+        "Blank", "Two points", "Three points", "Four points", "Four points with obstacle",
+        "Two points moving"
     ]
 
     property string selectedConfiguration: configurations[0]
@@ -38,8 +39,16 @@ Page {
 
     World {
         id: world
-        simPaused: actionPause.checked
         damperCoefficient: damperSlider.value
+
+        onSelectedPointChanged: {
+            pointParametersDialog.point = selectedPoint
+            pointParametersDialog.show()
+        }
+    }
+
+    PointParametersDialog {
+        id: pointParametersDialog
     }
 
     Canvas {
@@ -103,7 +112,8 @@ Page {
         running: true;
         repeat: true
         onTriggered: {
-            world.update();
+            if (!actionPause.checked)
+                world.update();
             canvas.requestPaint();
         }
     }
@@ -198,7 +208,41 @@ Page {
             point = world.addPoint(11, 4.94)
             point.criticalRadius = 3
             point.mass = 10000
-            point.fixed = true
+            point.clearVisibleObjectsList()
+            point.acceptNewPoints = false
+            break;
+
+        case "Four points with obstacle":
+            var point = world.addPoint(1, 2.94)
+            world.addPoint(1, 3.94)
+            point = world.addPoint(1, 4.94)
+            point = world.addPoint(1, 5.94)
+
+            // target
+            point = world.addPoint(7, 4.94)
+            point.criticalRadius = 3
+            point.mass = 10000
+            point.clearVisibleObjectsList()
+            point.acceptNewPoints = false
+            point.ownForce.x = 5000000
+
+            // obstacle
+            point = world.addPoint(15, 4.94)
+            point.criticalRadius = 0.7
+            point.mass = 200
+            point.clearVisibleObjectsList()
+            point.acceptNewPoints = false
+            point.obstacle = true
+            break;
+
+        case "Two points moving":
+            var point = world.addPoint(5, 0.8)
+            point.ownForce.y = 500000
+            point.mass = 200
+
+            point = world.addPoint(15, 0.8)
+            point.ownForce.y = 500000
+            point.mass = 200
             break;
 
         case "Blank":  // fall through

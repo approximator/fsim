@@ -3,5 +3,6 @@
         <file>qml/main.qml</file>
         <file>qml/CanvasPage.qml</file>
         <file>qml/LabeledTextEdit.qml</file>
+        <file>qml/PointParametersDialog.qml</file>
     </qresource>
 </RCC>

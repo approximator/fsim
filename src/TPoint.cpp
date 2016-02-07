@@ -18,10 +18,12 @@ TPoint::TPoint(const uint _id, const qreal _x, const qreal _y, QObject *parent)
     , m_x(_x)
     , m_y(_y)
     , m_mass(80.0)
-    , m_fixed(false)
     , m_obstacle(false)
     , m_force()
+    , m_ownForce(0, 0)
     , m_criticalRadius(1)
+    , m_visibleObjects()
+    , m_acceptNewPoints(true)
 {
     qDebug() << "Added point [" << point_id() << "]: " << _x << ", " << _y;
 }
@@ -56,4 +58,20 @@ void TPoint::set_speed(const qreal _x, const qreal _y)
 {
     m_Speed.setX(_x);
     m_Speed.setY(_y);
+}
+
+void TPoint::addVisibleObject(TPoint *point)
+{
+    if (m_acceptNewPoints)
+        m_visibleObjects.append(point);
+}
+
+const QList<TPoint *> &TPoint::visibleObjects() const
+{
+    return m_visibleObjects;
+}
+
+void TPoint::clearVisibleObjectsList()
+{
+    m_visibleObjects.clear();
 }

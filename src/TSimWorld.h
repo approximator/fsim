@@ -27,7 +27,6 @@ class TSimWorld : public QObject
     QML_READONLY_VAR_PROPERTY(TPointsModel *, model)
     QML_READONLY_VAR_PROPERTY(TScreen *, screen)
     QML_WRITABLE_VAR_PROPERTY(TPoint *, selectedPoint)
-    QML_WRITABLE_VAR_PROPERTY(bool, simPaused)
     QML_WRITABLE_VAR_PROPERTY(qreal, gravity)
     QML_WRITABLE_VAR_PROPERTY(qreal, damperCoefficient)
 

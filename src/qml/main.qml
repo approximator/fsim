@@ -4,7 +4,7 @@ import Qt.labs.settings 1.0
 
 ApplicationWindow {
     id: mainWindow
-    property string themeStyle: "dark" // default
+    property string themeStyle: "default" // default
 
     title: "Forces simulation"
 

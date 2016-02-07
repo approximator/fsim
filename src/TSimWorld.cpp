@@ -17,7 +17,6 @@ TSimWorld::TSimWorld(QObject *parent)
     , m_model(new TPointsModel(this, "x", "y"))
     , m_screen(new TScreen(this))
     , m_selectedPoint(nullptr)
-    , m_simPaused(false)
     , m_gravity(1000)
     , m_damperCoefficient(5000)
 {
@@ -57,9 +56,13 @@ qreal TSimWorld::yToWorld(qreal yPos) const
 
 TPoint *TSimWorld::addPoint(qreal _x, qreal _y)
 {
-    auto point = new TPoint(m_model->count(), _x, _y, m_model);
-    m_model->append(point);
-    return point;
+    auto newPoint = new TPoint(m_model->count(), _x, _y, m_model);
+    for (auto point = m_model->constBegin(), lastPoint = m_model->constEnd(); point != lastPoint; ++point) {
+        newPoint->addVisibleObject(*point);
+        (*point)->addVisibleObject(newPoint);
+    }
+    m_model->append(newPoint);
+    return newPoint;
 }
 
 inline qreal rungeKutta(const qreal h, const qreal val)
@@ -74,16 +77,11 @@ inline qreal rungeKutta(const qreal h, const qreal val)
 
 void TSimWorld::update()
 {
-    if (simPaused())
-        return;
-
     // Update forces and positions
     for (auto i = m_model->constBegin(), ee = m_model->constEnd(); i != ee; ++i) {
         TPoint *point = (*i);
-        if (point->fixed())
-            continue;
 
-        for (auto j = m_model->constBegin(); j != ee; ++j) {
+        for (auto j = point->visibleObjects().begin(); j != point->visibleObjects().end(); ++j) {
             TPoint *otherPoint = (*j);
             if (point == otherPoint) {
                 continue;
@@ -104,6 +102,8 @@ void TSimWorld::update()
             Fij *= forceMagnitude;                  // forceDirection * forceMagnitude
             point->set_force(point->force() + Fij); // Fi = Fi + Fij
         }
+
+        point->set_force(point->force() + point->ownForce());
 
         // Update point position
         const qreal udx = -damperCoefficient() * point->speed().x();
