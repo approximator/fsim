@@ -146,6 +146,20 @@ Page {
         }
     }
 
+    Label {
+        font.family: "Roboto"
+        font.weight: Font.Bold
+        font.pixelSize: Units.dp(40)
+        text: "Simulation paused"
+        color: Theme.primaryColor
+        visible: actionPause.checked
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            verticalCenter: parent.verticalCenter
+            margins: Units.dp(16)
+        }
+    }
+
     View {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -219,12 +233,12 @@ Page {
             point = world.addPoint(1, 5.94)
 
             // target
-            point = world.addPoint(7, 4.94)
-            point.criticalRadius = 3
-            point.mass = 10000
+            point = world.addPoint(10, 4.94)
+            point.criticalRadius = 8
+            point.mass = 100000
             point.clearVisibleObjectsList()
             point.acceptNewPoints = false
-            point.ownForce.x = 5000000
+            point.ownForce.x = 50000000
 
             // obstacle
             point = world.addPoint(15, 4.94)
@@ -255,19 +269,7 @@ Page {
         var num = world.model.rowCount()
         if (num <= 0)
         {
-            ctx.fillStyle = Qt.lighter(Theme.primaryDarkColor)
-            var text = "Double click to add point"
-            ctx.font = "bold 40px Ubuntu bold"
-            ctx.fillText(text, canvas.width/2 - ctx.measureText(text).width / 2, 100);
             return
-        }
-
-        if (world.simPaused)
-        {
-            ctx.fillStyle = Qt.lighter(Theme.primaryDarkColor)
-            var text = "Simulation paused"
-            ctx.font = "bold 40px Ubuntu bold"
-            ctx.fillText(text, canvas.width/2 - ctx.measureText(text).width / 2, 100);
         }
 
         var pointSize = 5
