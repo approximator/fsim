@@ -302,10 +302,9 @@ Page {
 
     function drawGrid(ctx) {
         var gridSize = 50
-        ctx.font = "10px Ubuntu bold"
 
         ctx.beginPath()
-        //ctx.lineWidth = 0.8
+        ctx.lineWidth = 0.8
         ctx.fillStyle = "yellow";
         var x = canvas.screen.offsetX % gridSize
         var y = canvas.screen.offsetY % gridSize
