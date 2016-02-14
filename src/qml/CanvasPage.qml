@@ -45,6 +45,7 @@ Page {
             pointParametersDialog.point = selectedPoint
             pointParametersDialog.show()
         }
+        Component.onCompleted: damperCoefficient = 400
     }
 
     PointParametersDialog {
@@ -111,6 +112,12 @@ Page {
         interval: 100;
         running: true;
         repeat: true
+
+//        property int currentTic: 0
+//        property int currentExperiment: -1
+//        property int maxTics: 0
+//        property var dampers: [10, 400, 500, 600, 800]
+
         onTriggered: {
             if (!actionPause.checked)
                 world.update();
@@ -187,9 +194,9 @@ Page {
                     Layout.fillWidth: true
                     numericValueLabel: true
                     tickmarksEnabled: true
-                    stepSize: 500
-                    minimumValue: 1000
-                    maximumValue: 10000
+                    stepSize: 10
+                    minimumValue: 10
+                    maximumValue: 1100
                     value: world.damperCoefficient
                 }
             }
@@ -200,12 +207,15 @@ Page {
         world.clean();
         canvas.screen.offsetX = 0
         canvas.screen.offsetY = 0
-        world.damperCoefficient = 8000
+        //world.damperCoefficient = 8000
 
         switch(configurationName) {
         case "Two points":
             var point = world.addPoint(10, 3.94)
             point = world.addPoint(14, 4.94)
+            point.clearVisibleObjectsList()
+            world.damperCoefficient = 10
+
             break;
 
         case "Three points":

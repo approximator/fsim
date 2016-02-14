@@ -29,9 +29,9 @@ Dialog {
         stepSize: 5
         minimumValue: 10
         maximumValue: 1000
-        onValueChanged: {
-            point.mass = value
-        }
+//        onValueChanged: {
+//            point.mass = value
+//        }
     }
 
     Column {

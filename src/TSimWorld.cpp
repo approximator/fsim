@@ -12,16 +12,47 @@
 
 #include <QtMath>
 
+//#include <fstream>
+
+//#define LOG_DATA(data)                                                                                                 \
+//    {                                                                                                                  \
+//        std::ofstream outfile("/tmp/points_data", std::ios_base::out | std::ios_base::app);                            \
+//        outfile << data << std::endl;                                                                                  \
+//        outfile.close();                                                                                               \
+//    }
+
 TSimWorld::TSimWorld(QObject *parent)
     : QObject(parent)
     , m_model(new TPointsModel(this, "x", "y"))
     , m_screen(new TScreen(this))
     , m_selectedPoint(nullptr)
-    , m_gravity(1000)
-    , m_damperCoefficient(5000)
+    , m_gravity(200)
+    , m_damperCoefficient(400)
 {
     qRegisterMetaType<TPoint *>("TPoint*");
     qRegisterMetaType<TScreen *>("TScreen*");
+
+    connect(this, &TSimWorld::damperCoefficientChanged, [this]() { qDebug() << "Damper = " << damperCoefficient(); });
+
+    // run a buch of fast experimens on startup
+    /*
+    static const int dampers[]      = { 10, 400, 900, 1200 };
+    static const int experimentsNum = sizeof(dampers) / sizeof(dampers[0]);
+
+    int ticsNum = 2000;
+    for (int experiment = 0; experiment < experimentsNum; ++experiment) {
+        set_damperCoefficient(dampers[experiment]);
+
+        m_model->clear();
+        auto point = addPoint(10, 3.94);
+        point      = addPoint(14, 4.94);
+        point->clearVisibleObjectsList();
+        // qDebug() << "Damper = " << m_damperCoefficient;
+        for (int tic = 0; tic < ticsNum; ++tic) {
+            update();
+        }
+    }
+    */
 }
 
 TPoint *TSimWorld::getPointAt(qreal _x, qreal _y) const
@@ -81,6 +112,7 @@ void TSimWorld::update()
     for (auto i = m_model->constBegin(), ee = m_model->constEnd(); i != ee; ++i) {
         TPoint *point = (*i);
 
+        point->set_force(QVector2D(0, 0));
         for (auto j = point->visibleObjects().begin(); j != point->visibleObjects().end(); ++j) {
             TPoint *otherPoint = (*j);
             if (point == otherPoint) {
@@ -101,13 +133,20 @@ void TSimWorld::update()
             const qreal forceMagnitude = gravity() * (attractiveForce - repulsiveForce);
             Fij *= forceMagnitude;                  // forceDirection * forceMagnitude
             point->set_force(point->force() + Fij); // Fi = Fi + Fij
+
+            // if (point->point_id() == 0) {
+            //     LOG_DATA("distance:" << distance << " force:" << forceMagnitude << " acceleration:"
+            //                          << point->acceleration().length() << " speed:" << point->speed().length()
+            //                          << " gravity:" << m_gravity << " damper:" << m_damperCoefficient);
+            // }
         }
 
         point->set_force(point->force() + point->ownForce());
 
         // Update point position
-        const qreal udx = -damperCoefficient() * point->speed().x();
-        const qreal udy = -damperCoefficient() * point->speed().y();
+
+        const qreal udx = -m_damperCoefficient * point->speed().x();
+        const qreal udy = -m_damperCoefficient * point->speed().y();
 
         point->set_acceleration( // d^2x/dt^2 = 1/m * (F + (u * dx/dt))
             (point->force().x() + udx) / point->mass(), (point->force().y() + udy) / point->mass());
@@ -116,9 +155,13 @@ void TSimWorld::update()
         point->set_speed(point->speed().x() + rungeKutta(h, point->acceleration().x()),
             point->speed().y() + rungeKutta(h, point->acceleration().y()));
 
+        // todo speed restriction
+        // if (point->speed().length() > 20) {
+        //     point->set_speed(point->speed() / point->speed().length() * 20);
+        // }
+
         point->set_x(point->x() + rungeKutta(h, point->speed().x()));
         point->set_y(point->y() + rungeKutta(h, point->speed().y()));
-        point->set_force(QVector2D(0, 0));
     }
 }
 
