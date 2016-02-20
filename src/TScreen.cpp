@@ -16,7 +16,7 @@ TScreen::TScreen(QObject *parent)
     , m_y(0)
     , m_width(100)
     , m_height(100)
-    , m_scale(50.0)
+    , m_scale(70.0)
     , m_offsetX(0)
     , m_offsetY(0)
 {

@@ -39,13 +39,12 @@ Page {
 
     World {
         id: world
-        damperCoefficient: damperSlider.value
 
         onSelectedPointChanged: {
             pointParametersDialog.point = selectedPoint
             pointParametersDialog.show()
         }
-        Component.onCompleted: damperCoefficient = 400
+        // Component.onCompleted: damperCoefficient = 400
     }
 
     PointParametersDialog {
@@ -197,7 +196,9 @@ Page {
                     stepSize: 10
                     minimumValue: 10
                     maximumValue: 1100
-                    value: world.damperCoefficient
+                    value: world.damperCoefficient * 1000
+
+                    onValueChanged: world.damperCoefficient = value / 1000
                 }
             }
         }
@@ -214,7 +215,7 @@ Page {
             var point = world.addPoint(10, 3.94)
             point = world.addPoint(14, 4.94)
             point.clearVisibleObjectsList()
-            world.damperCoefficient = 10
+            world.damperCoefficient = 0.04
 
             break;
 
