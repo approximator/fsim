@@ -5,10 +5,11 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 05, 2015
- * @date Modified Feb 05, 2016
+ * @date Modified Feb 20, 2016
  */
 
 #include "TSimWorld.h"
+#include "experiment_runner.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -28,6 +29,11 @@ int main(int argc, char *argv[])
     app.setOrganizationName("ForcesSimulator");
     app.setApplicationName("ForcesSimulator");
     QSettings::setDefaultFormat(QSettings::IniFormat);
+
+#ifdef JUST_RUN_EXPERIMENTS
+    qDebug() << "Do not start UI. Running experiments only";
+    return ExperimentRunner().run();
+#endif
 
     QQmlApplicationEngine engine;
 

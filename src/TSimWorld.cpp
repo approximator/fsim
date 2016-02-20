@@ -5,21 +5,13 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 05, 2015
- * @date Modified Feb 07, 2016
+ * @date Modified Feb 20, 2016
  */
 
 #include "TSimWorld.h"
+#include "experiment_runner.h"
 
 #include <QtMath>
-
-//#include <fstream>
-
-//#define LOG_DATA(data)                                                                                                 \
-//    {                                                                                                                  \
-//        std::ofstream outfile("/tmp/points_data", std::ios_base::out | std::ios_base::app);                            \
-//        outfile << data << std::endl;                                                                                  \
-//        outfile.close();                                                                                               \
-//    }
 
 TSimWorld::TSimWorld(QObject *parent)
     : QObject(parent)
@@ -33,26 +25,6 @@ TSimWorld::TSimWorld(QObject *parent)
     qRegisterMetaType<TScreen *>("TScreen*");
 
     connect(this, &TSimWorld::damperCoefficientChanged, [this]() { qDebug() << "Damper = " << damperCoefficient(); });
-
-    // run a buch of fast experimens on startup
-    /*
-    static const int dampers[]      = { 10, 400, 900, 1200 };
-    static const int experimentsNum = sizeof(dampers) / sizeof(dampers[0]);
-
-    int ticsNum = 2000;
-    for (int experiment = 0; experiment < experimentsNum; ++experiment) {
-        set_damperCoefficient(dampers[experiment]);
-
-        m_model->clear();
-        auto point = addPoint(10, 3.94);
-        point      = addPoint(14, 4.94);
-        point->clearVisibleObjectsList();
-        // qDebug() << "Damper = " << m_damperCoefficient;
-        for (int tic = 0; tic < ticsNum; ++tic) {
-            update();
-        }
-    }
-    */
 }
 
 TPoint *TSimWorld::getPointAt(qreal _x, qreal _y) const
@@ -134,11 +106,12 @@ void TSimWorld::update()
             Fij *= forceMagnitude;                  // forceDirection * forceMagnitude
             point->set_force(point->force() + Fij); // Fi = Fi + Fij
 
-            // if (point->point_id() == 0) {
-            //     LOG_DATA("distance:" << distance << " force:" << forceMagnitude << " acceleration:"
-            //                          << point->acceleration().length() << " speed:" << point->speed().length()
-            //                          << " gravity:" << m_gravity << " damper:" << m_damperCoefficient);
-            // }
+            if (point->point_id() == 0) {
+                LOG_EXPERIMENT_DATA("distance:" << distance << " force:" << forceMagnitude
+                                                << " acceleration:" << point->acceleration().length()
+                                                << " speed:" << point->speed().length() << " gravity:" << m_gravity
+                                                << " damper:" << m_damperCoefficient);
+            }
         }
 
         point->set_force(point->force() + point->ownForce());

@@ -8,6 +8,8 @@ Project {
     property path fsimQmlInstallDir: FileInfo.joinPaths(fsimDataPath, "qml")
     property path fsimPluginsInstallDir: FileInfo.joinPaths(fsimDataPath, "plugins")
 
+    property bool justRunExperiments: false
+
     Product {
         type: "application" // no Mac app bundle
 
@@ -17,6 +19,12 @@ Project {
         Depends { name: "cpp" }
         cpp.cxxLanguageVersion: "c++11"
         cpp.warningLevel: "all"
+
+        property stringList commonDefines: [
+            'FSIM_QML_MODULES_PATH="' + FileInfo.relativePath("", fsimQmlInstallDir) + '"',
+            'FSIM_PLUGINS_PATH="' + FileInfo.relativePath("", fsimPluginsInstallDir) + '"',
+
+        ]
 
         Properties {
             condition: qbs.targetOS.contains("linux")
@@ -54,10 +62,7 @@ Project {
             files: "*.qrc"
         }
 
-        cpp.defines: [
-            'FSIM_QML_MODULES_PATH="' + FileInfo.relativePath("", fsimQmlInstallDir) + '"',
-            'FSIM_PLUGINS_PATH="' + FileInfo.relativePath("", fsimPluginsInstallDir) + '"',
-        ]
+        cpp.defines: commonDefines
 
         Group {
             fileTagsFilter: "application"
@@ -73,6 +78,11 @@ Project {
             ]
             qbs.install: true
             qbs.installDir: fsimQmlInstallDir
+        }
+
+        Properties {
+            condition: project.justRunExperiments
+            cpp.defines: commonDefines.concat(['JUST_RUN_EXPERIMENTS'])
         }
     }
 
