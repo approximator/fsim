@@ -7,3 +7,6 @@
 [submodule "modules/Qt-QML-Models"]
 	path = modules/Qt-QML-Models
 	url = https://github.com/approximator/Qt-QML-Models.git
+[submodule "modules/Qt-Qbs-Application"]
+	path = modules/Qt-Qbs-Application
+	url = https://github.com/approximator/Qt-Qbs-Application.git

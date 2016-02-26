@@ -1,6 +1,8 @@
 import qbs
 import qbs.FileInfo
 
+import "../modules/Qt-Qbs-Application/qbs/imports/CppApplicationBase.qbs" as CppApplicationBase
+
 Project {
     name: "ForcesSimlation"
 
@@ -8,46 +10,20 @@ Project {
     property path fsimQmlInstallDir: FileInfo.joinPaths(fsimDataPath, "qml")
     property path fsimPluginsInstallDir: FileInfo.joinPaths(fsimDataPath, "plugins")
 
-    property bool justRunExperiments: false
+    property bool justRunExperiments: false 
 
-    Product {
-        type: "application" // no Mac app bundle
-
-        Depends { name: "libqtqmltricks-qtqmlmodels" }
-        Depends { name: "libqtqmltricks-qtsupermacros" }
-
-        Depends { name: "cpp" }
-        cpp.cxxLanguageVersion: "c++11"
-        cpp.warningLevel: "all"
+    CppApplicationBase {
 
         property stringList commonDefines: [
             'FSIM_QML_MODULES_PATH="' + FileInfo.relativePath("", fsimQmlInstallDir) + '"',
             'FSIM_PLUGINS_PATH="' + FileInfo.relativePath("", fsimPluginsInstallDir) + '"',
-
         ]
 
-        Properties {
-            condition: qbs.targetOS.contains("linux")
-            cpp.commonCompilerFlags: ['-Wall', '-Wextra', '-pedantic', '-Weffc++', '-Wold-style-cast']
-            cpp.systemIncludePaths: [
-                FileInfo.joinPaths(qbs.getEnv('QTDIR'), 'include'),
-                FileInfo.joinPaths(qbs.getEnv('QTDIR'), 'include/QtCore'),
-                FileInfo.joinPaths(qbs.getEnv('QTDIR'), 'include/QtGui'),
-                FileInfo.joinPaths(qbs.getEnv('QTDIR'), 'include/QtQml'),
-            ]
-        }
-
-        cpp.rpaths: qbs.targetOS.contains("osx")
-                    ? ["@executable_path/../lib"]
-                    : ["$ORIGIN/../lib"]
-
-        Properties {
-            //OS X special compiler configs
-            condition: qbs.targetOS.contains("osx")
-            cpp.cxxStandardLibrary: "libc++"
-        }
+        property stringList additionalDefines: []
 
         Depends { name: "Qt"; submodules: ["qml", "quick", "gui", "svg"] }
+        Depends { name: "libqtqmltricks-qtqmlmodels" }
+        Depends { name: "libqtqmltricks-qtsupermacros" }
 
         Group {
             name: "Sources"
