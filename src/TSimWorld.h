@@ -4,7 +4,8 @@
  * @brief Representation of a simulation world that contains points
  *
  *
- * Copyright © 2015-2016 Oleksii Aliakin (alex@nls.la)
+ * Copyright © 2016 Oleksii Aliakin. All rights reserved.
+ * Author: Oleksii Aliakin (alex@nls.la)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +24,14 @@
 #define SIMWORLD_H
 
 #include "QQmlObjectListModel.h"
+#include "TInteractionFunctions.h"
 #include "TPoint.h"
 #include "TScreen.h"
 
 #include <QAbstractListModel>
 #include <QList>
 #include <QObject>
+#include <functional>
 
 typedef QQmlObjectListModel<TPoint> TPointsModel;
 
@@ -42,6 +45,8 @@ class TSimWorld : public QObject
     QML_WRITABLE_VAR_PROPERTY(qreal, damperCoefficient)
 
 public:
+    typedef std::function<int(TSimWorld *)> TInteractionFunction;
+
     explicit TSimWorld(QObject *parent = 0);
 
     Q_INVOKABLE TPoint *getPointAt(qreal _x, qreal _y) const;
@@ -54,13 +59,12 @@ public:
     Q_INVOKABLE TPoint *addPoint(qreal _x, qreal _y);
     Q_INVOKABLE void update();
     Q_INVOKABLE void clean();
-    Q_INVOKABLE QVector2D forceAt(qreal _x, qreal _y);
 
 private:
     TSimWorld(const TSimWorld &other) = delete;
     TSimWorld &operator=(const TSimWorld &other) = delete;
 
-public slots:
+    TInteractionFunction m_interactionFunc = &TInteractionFunctions::polinomial;
 };
 
 #endif // SIMWORLD_H
