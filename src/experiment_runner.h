@@ -1,10 +1,11 @@
 /*!
- * @file experimant_runner.h
+ * @file experiment_runner.h
  *
  * @brief This file is used whet we want just run a few experiments without starting the UI
  *
  *
- * Copyright © 2015-2016 Oleksii Aliakin (alex@nls.la)
+ * Copyright © 2015-2016 Oleksii Aliakin. All rights reserved.
+ * Author: Oleksii Aliakin (alex@nls.la)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +23,12 @@
 #ifndef EXPERIMENT_RUNNER_H
 #define EXPERIMENT_RUNNER_H
 
+#ifdef JUST_RUN_EXPERIMENTS
+
 #include "TSimWorld.h"
 
 #include <QDir>
 #include <fstream>
-
-#ifdef JUST_RUN_EXPERIMENTS
 
 #define DATA_FILE_NAME "/tmp/fsim_experiments_data"
 #define LOG_EXPERIMENT_DATA(data)                                                                                      \
@@ -37,6 +38,10 @@
         outfile.close();                                                                                               \
     }
 
+#ifndef DAMPERS
+#define DAMPERS 0.1, 1, 3, 5
+#endif
+
 class ExperimentRunner
 {
 public:
@@ -45,7 +50,7 @@ public:
         QDir().remove(DATA_FILE_NAME);
 
         TSimWorld world;
-        static const double dampers[]   = { 0.05, 0.1, 0.5, 0.7, 1 };
+        static const double dampers[]   = { DAMPERS };
         static const int experimentsNum = sizeof(dampers) / sizeof(dampers[0]);
 
         int ticsNum = 12000;
