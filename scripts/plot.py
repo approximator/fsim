@@ -1,5 +1,7 @@
+#!/usr/bin/env python
 
-# Copyright © 2016 Oleksii Aliakin (alex@nls.la)
+# Copyright © 2016 Oleksii Aliakin. All rights reserverd.
+# Author: Oleksii Aliakin (alex@nls.la)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,8 +70,12 @@ def plot_by_experiment(experiments):
 
 
 def plot_on_one(experiments):
+    first_experiment = None
+    for exp in experiments:
+        first_experiment = exp
+        break
 
-    for param_name in experiments[0.1].keys():
+    for param_name in first_experiment.keys():
         plt.figure()
         for key, experiment in experiments.items():
             param_data = experiment[param_name]
