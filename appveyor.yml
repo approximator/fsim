@@ -21,9 +21,7 @@ build_script:
 
     qbs config defaultProfile qt
 
-    cd %APPVEYOR_BUILD_FOLDER%\src
-
-    qbs --command-echo-mode command-line --clean-install-root qbs.installRoot:%INSTALL_DIR% %BUILD_VARIANT%
+    qbs --file %APPVEYOR_BUILD_FOLDER% --command-echo-mode command-line --clean-install-root qbs.installRoot:%INSTALL_DIR% %BUILD_VARIANT%
 
     windeployqt --%BUILD_VARIANT% --no-system-d3d-compiler --no-translations --no-qmltooling --qmldir %APPVEYOR_BUILD_FOLDER%\src\qml %INSTALL_DIR%
 
