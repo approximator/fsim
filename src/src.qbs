@@ -19,14 +19,14 @@
 import qbs
 import qbs.FileInfo
 
-Project {
-    name: "fsim_project"
+QtAppProject {
+    name: "fsim_app"
+    appName: "ForcesSimlation"
+    appVersion: { major: 0; minor: 0; release: 2 }
 
-    property bool justRunExperiments: false
-
-    qbsSearchPaths: "modules/Qt-Qbs-Application/qbs"
-
+    appSourceRoot: FileInfo.joinPaths(sourceDirectory, "../")
     references: [
-        "src/src.qbs"
+        "ForcesSimulationApp.qbs",
+        "../modules/modules.qbs"
     ]
 }

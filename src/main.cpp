@@ -30,9 +30,11 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef APP_PLUGINS_PATH
     // Add path to search for Qt plugins
-    QString pluginsPaths = QString("%1/%2").arg(QFileInfo(argv[0]).dir().path(), FSIM_PLUGINS_PATH);
+    QString pluginsPaths = QString("%1/%2").arg(QFileInfo(argv[0]).dir().path(), APP_PLUGINS_PATH);
     QCoreApplication::addLibraryPath(pluginsPaths);
+#endif
 
     QGuiApplication app(argc, argv);
     qDebug() << "Looking for plugins in " << app.libraryPaths();
@@ -49,7 +51,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    QString qmlFilesPath = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), FSIM_QML_MODULES_PATH);
+    QString qmlFilesPath = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), APP_QML_MODULES_PATH);
     engine.addImportPath(qmlFilesPath);
     qmlRegisterType<TSimWorld>("sim.world", 1, 0, "World");
     qRegisterMetaType<TPointsModel *>("TPointsModel*");
