@@ -2,10 +2,11 @@ import qbs
 import qbs.FileInfo
 
 CppApplicationBase {
+    targetName: project.fsimAppTarget
 
     property stringList commonDefines: [
-        'FSIM_QML_MODULES_PATH="' + FileInfo.relativePath("", fsimQmlInstallDir) + '"',
-        'FSIM_PLUGINS_PATH="' + FileInfo.relativePath("", fsimPluginsInstallDir) + '"',
+        'FSIM_QML_MODULES_PATH="' + FileInfo.relativePath(project.fsimBinDir, fsimQmlInstallDir) + '"',
+        'FSIM_PLUGINS_PATH="' + FileInfo.relativePath(project.fsimBinDir, fsimPluginsInstallDir) + '"',
     ]
 
     property stringList additionalDefines: []
@@ -31,7 +32,9 @@ CppApplicationBase {
 
     Group {
         fileTagsFilter: "application"
+        qbs.installPrefix: project.fsimInstallDir
         qbs.install: true
+        qbs.installDir: project.fsimBinDir
     }
 
     Properties {
