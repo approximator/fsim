@@ -29,14 +29,19 @@
 
 #include <QDir>
 #include <fstream>
+#include <QString>
 
-#define DATA_FILE_NAME "/tmp/fsim_experiments_data"
-#define LOG_EXPERIMENT_DATA(data)                                                                                      \
-    {                                                                                                                  \
-        std::ofstream outfile(DATA_FILE_NAME, std::ios_base::out | std::ios_base::app);                                \
-        outfile << data << std::endl;                                                                                  \
-        outfile.close();                                                                                               \
-    }
+#define DEFAULT_OUT_FILE "/tmp/fsim_experiments_data"
+#define LOG_EXPERIMENT_DATA(data)        \
+    do {                                 \
+        auto filename = std::string(qgetenv("FSIM_DATA_FILE_NAME").constData()); \
+        if (filename.empty()) {          \
+            filename = DEFAULT_OUT_FILE; \
+        }                                \
+        std::ofstream outfile(filename, std::ios_base::out | std::ios_base::app);  \
+        outfile << data << std::endl;    \
+        outfile.close();                 \
+    } while (0)
 
 #ifndef DAMPERS
 #define DAMPERS 0.1, 1, 3, 5
@@ -47,7 +52,12 @@ class ExperimentRunner
 public:
     int run()
     {
-        QDir().remove(DATA_FILE_NAME);
+        auto filename = QString(qgetenv("FSIM_DATA_FILE_NAME").constData());
+        if (filename.isEmpty()) {
+            filename = DEFAULT_OUT_FILE;
+        }
+        qDebug() << "Output file: " << filename;
+        QDir().remove(filename);
 
         TSimWorld world;
         static const double dampers[]   = { DAMPERS };
