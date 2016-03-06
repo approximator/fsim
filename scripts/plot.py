@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
+#
 # Copyright © 2016 Oleksii Aliakin. All rights reserverd.
 # Author: Oleksii Aliakin (alex@nls.la)
 #
@@ -15,10 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import matplotlib.pyplot as plt
 
 
 def load_file(file_name):
+    print('Loading data from: {}'.format(file_name))
     experiments = {}
     prev_experiment = 0
     with open(file_name, 'r') as data_file:
@@ -43,7 +46,7 @@ def load_file(file_name):
     return experiments
 
 
-def plot_by_experiment(experiments):
+def plot_by_experiment(experiments, out_dir):
     for key, experiment in experiments.items():
         plt.figure()
 
@@ -66,16 +69,16 @@ def plot_by_experiment(experiments):
         plt.ylabel('Max connected component')
         plt.title('Graph resilience under random order attack')
 
-        plt.savefig('/tmp/damper_{}.svg'.format(key))
+        plt.savefig(os.path.join(out_dir, 'damper_{}.svg'.format(key)))
 
 
-def plot_on_one(experiments):
+def plot_on_one(experiments, out_dir):
     first_experiment = None
     for exp in experiments:
         first_experiment = exp
         break
 
-    for param_name in first_experiment.keys():
+    for param_name in experiments[first_experiment].keys():
         plt.figure()
         for key, experiment in experiments.items():
             param_data = experiment[param_name]
@@ -93,9 +96,38 @@ def plot_on_one(experiments):
             plt.ylabel(param_name)
             plt.title('Title')
 
-        plt.savefig('/tmp/{}.svg'.format(param_name))
+        save_to = os.path.join(out_dir, '{}.svg'.format(param_name))
+        print('Saving figure to: {}'.format(save_to))
+        plt.savefig(save_to)
+
+
+def check_parameters(input_file, out_dir):
+    errors = []
+    if not os.path.isfile(input_file):
+        errors.append('No such file: {}'.format(input_file))
+
+    if not os.path.isdir(out_dir):
+        try:
+            os.makedirs(out_dir)
+        except OSError as ex:
+            errors.append('Could not create dir: {} ({})'.format(out_dir, str(ex)))
+
+    return errors
 
 if __name__ == '__main__':
-    # plot_by_experiment(load_file('/tmp/points_data'))
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--input',
+                        required=True,
+                        help='Path to the input file')
+    parser.add_argument('-o', '--out', required=True, help='Directory to save results')
+    args = parser.parse_args()
 
-    plot_on_one(load_file('/tmp/fsim_experiments_data'))
+    errors = check_parameters(args.input, args.out)
+    if errors:
+        for err in errors:
+            print(err)
+        exit(1)
+
+    data = load_file(args.input)
+    plot_on_one(data, args.out)
