@@ -18,11 +18,16 @@
 
 SCRIPT_DIR=$(cd $(dirname $0) && pwd)
 SRC_DIR=$(cd ${SCRIPT_DIR}/../ && pwd)
+FSIM_INSTALL_DIR="/tmp/fsim/fsim_install"
+
+export FSIM_DATA_FILE_NAME="/tmp/fsim_data"
 
 qbs run --file ${SRC_DIR}                      \
         --command-echo-mode summary            \
         --clean-install-root                   \
         --build-directory /tmp/fsim/fsim_build \
-        qbs.installRoot:/tmp/fsim/fsim_install \
-        release                                \
-        project.justRunExperiments:true
+        qbs.installRoot:${FSIM_INSTALL_DIR}    \
+        project.justRunExperiments:true        \
+        release
+
+python ${SCRIPT_DIR}/plot.py --input ${FSIM_DATA_FILE_NAME} --out ${FSIM_INSTALL_DIR}
