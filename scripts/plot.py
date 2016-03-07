@@ -17,6 +17,8 @@
 # limitations under the License.
 
 import os
+import matplotlib
+matplotlib.use('Qt4Agg')
 import matplotlib.pyplot as plt
 
 
