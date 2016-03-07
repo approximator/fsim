@@ -1,16 +1,26 @@
 os: Visual Studio 2015
 version: 1.0.{build}
+
 environment:
   QTDIR: C:\Qt\5.5\msvc2013_64
-
+  PYTHON: "C:\\Python34"
+  INSTALL_DIR: "%APPVEYOR_BUILD_FOLDER%\\install"
   matrix:
   - BUILD_VARIANT: debug
   - BUILD_VARIANT: release
 
 install:
   - cmd: git submodule update --init --recursive
-  - cmd: set PATH=%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
-  - cmd: set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\install
+  - cmd: curl -fsS -o rclone.zip http://downloads.rclone.org/rclone-v1.28-windows-386.zip && 7z e rclone.zip
+  - cmd: set PATH=%PYTHON%;%PYTHON%\Scripts;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%;%cd%;%cd%\rclone-v1.28-windows-386
+  - cmd: set FSIM_DIR=%INSTALL_DIR%\\ForcesSimlation
+  - cmd: set FSIM_EXECUTABLE=%FSIM_DIR%\ForcesSimlation
+  - cmd: set SCRIPTS_DIR=%APPVEYOR_BUILD_FOLDER%\scripts
+  - cmd: set FSIM_DATA_FILE_NAME=%APPVEYOR_BUILD_FOLDER%\fsim_data
+  - cmd: set SCREENSHOTS_DIR=%INSTALL_DIR%\screenshots
+  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide -V && pip install --upgrade --pre http://wxpython.org/Phoenix/snapshot-builds/wxPython_Phoenix-3.0.3.dev1956+aab2833-cp34-cp34m-win32.whl -V && pip install --upgrade --pre https://pypi.python.org/packages/cp34/m/matplotlib/matplotlib-1.5.1-cp34-none-win32.whl -V
+  - python --version
+  - pip --version
 
 build_script:
 - cmd: >-
