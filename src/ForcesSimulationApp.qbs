@@ -40,10 +40,11 @@ CppApplicationBase {
         files: "*.qrc"
     }
 
+    cpp.defines: project.generalDefines.concat('QTQMLTRICKS_NO_PREFIX_ON_GETTERS')
 
     Properties {
         condition: project.justRunExperiments
-        cpp.defines: project.generalDefines.concat(['JUST_RUN_EXPERIMENTS'])
+        cpp.defines: project.generalDefines.concat(['JUST_RUN_EXPERIMENTS', 'QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
     }
 
     targetInstallDir: project.appInstallDir
