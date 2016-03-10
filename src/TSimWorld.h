@@ -24,11 +24,11 @@
 #define SIMWORLD_H
 
 #include "QQmlObjectListModel.h"
+#include "QQmlAutoPropertyHelpers.h"
 #include "TInteractionFunctions.h"
 #include "TPoint.h"
 #include "TScreen.h"
 
-#include <QAbstractListModel>
 #include <QList>
 #include <QObject>
 #include <functional>
@@ -38,11 +38,11 @@ typedef QQmlObjectListModel<TPoint> TPointsModel;
 class TSimWorld : public QObject
 {
     Q_OBJECT
-    QML_READONLY_VAR_PROPERTY(TPointsModel *, model)
-    QML_READONLY_VAR_PROPERTY(TScreen *, screen)
-    QML_WRITABLE_VAR_PROPERTY(TPoint *, selectedPoint)
-    QML_WRITABLE_VAR_PROPERTY(qreal, gravity)
-    QML_WRITABLE_VAR_PROPERTY(qreal, damperCoefficient)
+    QML_READONLY_AUTO_PROPERTY(TPointsModel *, model)
+    QML_READONLY_AUTO_PROPERTY(TScreen *, screen)
+    QML_WRITABLE_AUTO_PROPERTY(TPoint *, selectedPoint)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, gravity)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, damperCoefficient)
 
 public:
     typedef std::function<int(TSimWorld *)> TInteractionFunction;
