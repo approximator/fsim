@@ -41,7 +41,6 @@ class TPoint : public QObject
     QML_WRITABLE_AUTO_PROPERTY(QVector2D, speed)
     QML_WRITABLE_AUTO_PROPERTY(QVector2D, acceleration)
     QML_WRITABLE_AUTO_PROPERTY(qreal, criticalRadius)
-
     QML_WRITABLE_AUTO_PROPERTY(bool, acceptNewPoints)
 
 public:
@@ -60,4 +59,4 @@ private:
     QList<TPoint*> m_visibleObjects;
 };
 
-#endif // TPOINT_H
+#endif  // TPOINT_H

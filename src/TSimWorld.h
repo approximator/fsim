@@ -23,8 +23,8 @@
 #ifndef SIMWORLD_H
 #define SIMWORLD_H
 
-#include "QQmlObjectListModel.h"
 #include "QQmlAutoPropertyHelpers.h"
+#include "QQmlObjectListModel.h"
 #include "TInteractionFunctions.h"
 #include "TPoint.h"
 #include "TScreen.h"
@@ -67,4 +67,4 @@ private:
     TInteractionFunction m_interactionFunc = &TInteractionFunctions::polinomial;
 };
 
-#endif // SIMWORLD_H
+#endif  // SIMWORLD_H

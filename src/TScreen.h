@@ -41,4 +41,4 @@ public:
     explicit TScreen(QObject *parent = 0);
 };
 
-#endif // TSCREEN_H
+#endif  // TSCREEN_H

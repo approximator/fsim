@@ -28,19 +28,19 @@
 #include "TSimWorld.h"
 
 #include <QDir>
-#include <fstream>
 #include <QString>
+#include <fstream>
 
 #define DEFAULT_OUT_FILE "/tmp/fsim_experiments_data"
-#define LOG_EXPERIMENT_DATA(data)        \
-    do {                                 \
-        auto filename = std::string(qgetenv("FSIM_DATA_FILE_NAME").constData()); \
-        if (filename.empty()) {          \
-            filename = DEFAULT_OUT_FILE; \
-        }                                \
-        std::ofstream outfile(filename, std::ios_base::out | std::ios_base::app);  \
-        outfile << data << std::endl;    \
-        outfile.close();                 \
+#define LOG_EXPERIMENT_DATA(data)                                                                                      \
+    do {                                                                                                               \
+        auto filename = std::string(qgetenv("FSIM_DATA_FILE_NAME").constData());                                       \
+        if (filename.empty()) {                                                                                        \
+            filename = DEFAULT_OUT_FILE;                                                                               \
+        }                                                                                                              \
+        std::ofstream outfile(filename, std::ios_base::out | std::ios_base::app);                                      \
+        outfile << data << std::endl;                                                                                  \
+        outfile.close();                                                                                               \
     } while (0)
 
 #ifndef DAMPERS
@@ -81,6 +81,6 @@ public:
 
 #else
 #define LOG_EXPERIMENT_DATA(data)
-#endif // JUST_RUN_EXPERIMENTS
+#endif  // JUST_RUN_EXPERIMENTS
 
-#endif // EXPERIMENT_RUNNER_H
+#endif  // EXPERIMENT_RUNNER_H

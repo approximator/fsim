@@ -52,20 +52,20 @@ int TInteractionFunctions::polinomial(TSimWorld *world)
                     continue;
                 }
 
-                const qreal distance = point->position().distanceToPoint(otherPoint->position()); // distance
-                QVector2D Fij        = (otherPoint->position() - point->position()).normalized(); // Force direction
+                const qreal distance = point->position().distanceToPoint(otherPoint->position());  // distance
+                QVector2D Fij        = (otherPoint->position() - point->position()).normalized();  // Force direction
 
                 const qreal criticalRadius = (point->criticalRadius() + otherPoint->criticalRadius());
 
                 qreal attractiveForce = 0;
                 if (!otherPoint->obstacle())
-                    attractiveForce = point->mass() * otherPoint->mass() / qPow(distance, 2); //        mi * mj / d^2
+                    attractiveForce = point->mass() * otherPoint->mass() / qPow(distance, 2);  //        mi * mj / d^2
 
                 const qreal repulsiveForce
-                    = criticalRadius * point->mass() * otherPoint->mass() / qPow(distance, 3); //  Rcr * mi * mj / d^3
+                    = criticalRadius * point->mass() * otherPoint->mass() / qPow(distance, 3);  //  Rcr * mi * mj / d^3
                 const qreal forceMagnitude = world->gravity() * (attractiveForce - repulsiveForce);
-                Fij *= forceMagnitude;                  // forceDirection * forceMagnitude
-                point->set_force(point->force() + Fij); // Fi = Fi + Fij
+                Fij *= forceMagnitude;                   // forceDirection * forceMagnitude
+                point->set_force(point->force() + Fij);  // Fi = Fi + Fij
 
                 if (point->point_id() == 0) {
                     LOG_EXPERIMENT_DATA("distance:" << distance << " force:" << forceMagnitude
@@ -82,7 +82,7 @@ int TInteractionFunctions::polinomial(TSimWorld *world)
             const qreal udx = -world->damperCoefficient() * point->speed().x();
             const qreal udy = -world->damperCoefficient() * point->speed().y();
 
-            point->set_acceleration( // d^2x/dt^2 = 1/m * (F + (u * dx/dt))
+            point->set_acceleration(  // d^2x/dt^2 = 1/m * (F + (u * dx/dt))
                 (point->force().x() + udx) / point->mass(), (point->force().y() + udy) / point->mass());
 
             const qreal h = 0.0005;
@@ -107,19 +107,19 @@ int TInteractionFunctions::linear(TSimWorld *world)
                     continue;
                 }
 
-                const qreal distance = point->position().distanceToPoint(otherPoint->position()); // distance
-                QVector2D Fij        = (otherPoint->position() - point->position()).normalized(); // Force direction
+                const qreal distance = point->position().distanceToPoint(otherPoint->position());  // distance
+                QVector2D Fij        = (otherPoint->position() - point->position()).normalized();  // Force direction
 
                 const qreal criticalRadius = (point->criticalRadius() + otherPoint->criticalRadius());
 
                 qreal attractiveForce = 0;
                 if (!otherPoint->obstacle())
-                    attractiveForce = 3 * distance + criticalRadius; //
+                    attractiveForce = 3 * distance + criticalRadius;  //
 
-                const qreal repulsiveForce = 2 * distance + criticalRadius; //
+                const qreal repulsiveForce = 2 * distance + criticalRadius;  //
                 const qreal forceMagnitude = -world->gravity() * (attractiveForce - repulsiveForce);
-                Fij *= forceMagnitude;                  // forceDirection * forceMagnitude
-                point->set_force(point->force() + Fij); // Fi = Fi + Fij
+                Fij *= forceMagnitude;                   // forceDirection * forceMagnitude
+                point->set_force(point->force() + Fij);  // Fi = Fi + Fij
 
                 if (point->point_id() == 0) {
                     LOG_EXPERIMENT_DATA("distance:" << distance << " force:" << forceMagnitude
@@ -136,7 +136,7 @@ int TInteractionFunctions::linear(TSimWorld *world)
             const qreal udx = -world->damperCoefficient() * point->speed().x();
             const qreal udy = -world->damperCoefficient() * point->speed().y();
 
-            point->set_acceleration( // d^2x/dt^2 = 1/m * (F + (u * dx/dt))
+            point->set_acceleration(  // d^2x/dt^2 = 1/m * (F + (u * dx/dt))
                 (point->force().x() + udx) / point->mass(), (point->force().y() + udy) / point->mass());
 
             const qreal h = 0.0005;
