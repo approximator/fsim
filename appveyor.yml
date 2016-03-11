@@ -15,6 +15,7 @@ environment:
   - BUILD_VARIANT: release
     ADDITIONAL_PARAMS: "qbs.installRoot:%APPVEYOR_BUILD_FOLDER%\\install project.justRunExperiments:true"
     TAKE_SCREENSHOT: "%INSTALL_DIR%\\ForcesSimlation\\ForcesSimlation && python %APPVEYOR_BUILD_FOLDER%\\scripts\\plot.py --input %APPVEYOR_BUILD_FOLDER%\\fsim_data --out %INSTALL_DIR%\\screenshots"
+    INSTALL_MATPLOTLIB: yes
 
 install:
   - cmd: git submodule update --init --recursive
@@ -25,7 +26,8 @@ install:
   - cmd: set SCRIPTS_DIR=%APPVEYOR_BUILD_FOLDER%\scripts
   - cmd: set FSIM_DATA_FILE_NAME=%APPVEYOR_BUILD_FOLDER%\fsim_data
   - cmd: set SCREENSHOTS_DIR=%INSTALL_DIR%\screenshots
-  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide -V && pip install --upgrade --pre http://wxpython.org/Phoenix/snapshot-builds/wxPython_Phoenix-3.0.3.dev1956+aab2833-cp34-cp34m-win32.whl -V && pip install --upgrade --pre https://pypi.python.org/packages/cp34/m/matplotlib/matplotlib-1.5.1-cp34-none-win32.whl -V
+  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide -V && pip install --upgrade --pre http://wxpython.org/Phoenix/snapshot-builds/wxPython_Phoenix-3.0.3.dev1956+aab2833-cp34-cp34m-win32.whl -V
+  - cmd: IF DEFINED INSTALL_MATPLOTLIB ( pip install --upgrade --pre https://pypi.python.org/packages/cp34/m/matplotlib/matplotlib-1.5.1-cp34-none-win32.whl -V )
   - python --version
   - pip --version
 

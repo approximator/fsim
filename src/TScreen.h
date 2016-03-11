@@ -22,23 +22,23 @@
 #ifndef TSCREEN_H
 #define TSCREEN_H
 
-#include "QQmlVarPropertyHelpers.h"
+#include "QQmlAutoPropertyHelpers.h"
 
 #include <QObject>
 
 class TScreen : public QObject
 {
     Q_OBJECT
-    QML_WRITABLE_VAR_PROPERTY(int, x)
-    QML_WRITABLE_VAR_PROPERTY(int, y)
-    QML_WRITABLE_VAR_PROPERTY(int, width)
-    QML_WRITABLE_VAR_PROPERTY(int, height)
-    QML_WRITABLE_VAR_PROPERTY(int, scale)
-    QML_WRITABLE_VAR_PROPERTY(int, offsetX)
-    QML_WRITABLE_VAR_PROPERTY(int, offsetY)
+    QML_WRITABLE_AUTO_PROPERTY(int, x)
+    QML_WRITABLE_AUTO_PROPERTY(int, y)
+    QML_WRITABLE_AUTO_PROPERTY(int, width)
+    QML_WRITABLE_AUTO_PROPERTY(int, height)
+    QML_WRITABLE_AUTO_PROPERTY(int, scale)
+    QML_WRITABLE_AUTO_PROPERTY(int, offsetX)
+    QML_WRITABLE_AUTO_PROPERTY(int, offsetY)
 
 public:
     explicit TScreen(QObject *parent = 0);
 };
 
-#endif // TSCREEN_H
+#endif  // TSCREEN_H

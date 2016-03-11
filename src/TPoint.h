@@ -22,7 +22,7 @@
 #ifndef TPOINT_H
 #define TPOINT_H
 
-#include "QQmlVarPropertyHelpers.h"
+#include "QQmlAutoPropertyHelpers.h"
 
 #include <QDebug>
 #include <QObject>
@@ -31,18 +31,17 @@
 class TPoint : public QObject
 {
     Q_OBJECT
-    QML_WRITABLE_VAR_PROPERTY(int, point_id)
-    QML_WRITABLE_VAR_PROPERTY(qreal, x)
-    QML_WRITABLE_VAR_PROPERTY(qreal, y)
-    QML_WRITABLE_VAR_PROPERTY(qreal, mass)
-    QML_WRITABLE_VAR_PROPERTY(bool, obstacle)
-    QML_WRITABLE_VAR_PROPERTY(QVector2D, force)
-    QML_WRITABLE_VAR_PROPERTY(QVector2D, ownForce)
-    QML_WRITABLE_VAR_PROPERTY(QVector2D, speed)
-    QML_WRITABLE_VAR_PROPERTY(QVector2D, acceleration)
-    QML_WRITABLE_VAR_PROPERTY(qreal, criticalRadius)
-
-    QML_WRITABLE_VAR_PROPERTY(bool, acceptNewPoints)
+    QML_WRITABLE_AUTO_PROPERTY(int, point_id)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, x)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, y)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, mass)
+    QML_WRITABLE_AUTO_PROPERTY(bool, obstacle)
+    QML_WRITABLE_AUTO_PROPERTY(QVector2D, force)
+    QML_WRITABLE_AUTO_PROPERTY(QVector2D, ownForce)
+    QML_WRITABLE_AUTO_PROPERTY(QVector2D, speed)
+    QML_WRITABLE_AUTO_PROPERTY(QVector2D, acceleration)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, criticalRadius)
+    QML_WRITABLE_AUTO_PROPERTY(bool, acceptNewPoints)
 
 public:
     explicit TPoint(const uint id, const qreal _x, const qreal _y, QObject* parent = 0);
@@ -60,4 +59,4 @@ private:
     QList<TPoint*> m_visibleObjects;
 };
 
-#endif // TPOINT_H
+#endif  // TPOINT_H

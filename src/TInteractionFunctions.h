@@ -33,4 +33,4 @@ public:
     static int linear(TSimWorld* world);
 };
 
-#endif // TINTERACTIONFUNCTIONSFACTORY_H
+#endif  // TINTERACTIONFUNCTIONSFACTORY_H

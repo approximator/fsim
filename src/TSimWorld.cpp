@@ -19,7 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include<cmath>
+#include <cmath>
 
 #include "TSimWorld.h"
 #include "experiment_runner.h"
@@ -40,7 +40,7 @@ TSimWorld::TSimWorld(QObject *parent)
 
 TPoint *TSimWorld::getPointAt(qreal _x, qreal _y) const
 {
-    const int eps = 5; // 5 screen dots
+    const int eps = 5;  // 5 screen dots
     for (const auto &point : *m_model)
         if (std::fabs(xToScreen(point->x()) - xToScreen(_x)) < eps
             && std::fabs(yToScreen(point->y()) - yToScreen(_y)) < eps)
