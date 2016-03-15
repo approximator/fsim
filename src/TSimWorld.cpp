@@ -88,3 +88,8 @@ void TSimWorld::clean()
 {
     m_model->clear();
 }
+
+void TSimWorld::setInteractionFunction(const TSimWorld::TInteractionFunction &func)
+{
+    m_interactionFunc = func;
+}

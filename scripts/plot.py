@@ -24,11 +24,19 @@ import matplotlib.pyplot as plt
 
 def load_file(file_name):
     print('Loading data from: {}'.format(file_name))
-    experiments = {}
+    experiment_sets = {}
+    current_experiment_set = None
     prev_experiment = 0
     with open(file_name, 'r') as data_file:
         for line in data_file:
             if len(line) < 1:
+                continue
+            if line.startswith('New experiment:'):
+                print(line)
+                current_experiment_set = line.split(':')[1].strip()
+                experiment_sets[current_experiment_set] = {}
+                continue
+            if not current_experiment_set:
                 continue
             temp_data = {}
             for data in line.split(' '):
@@ -39,39 +47,13 @@ def load_file(file_name):
 
             if prev_experiment != current_experiment:
                 prev_experiment = current_experiment
-                experiments[current_experiment] = {}
+                experiment_sets[current_experiment_set][current_experiment] = {}
             for key, value in temp_data.items():
                 # print(key, value)
-                if not experiments[current_experiment].get(key, None):
-                    experiments[current_experiment][key] = []
-                experiments[current_experiment][key].append(value)
-    return experiments
-
-
-def plot_by_experiment(experiments, out_dir):
-    for key, experiment in experiments.items():
-        plt.figure()
-
-        distance = experiment['distance']
-        force = experiment['force']
-        speed = experiment['speed']
-
-        time = range(len(force))
-
-        print(len(force), len(distance), len(time))
-        # distance = map(lambda x: x / max(distance), distance)
-        # force = map(lambda x: x / max(force), force)
-        plt.plot(time, distance, '-r', label='Distance')
-        # plt.plot(time, force, '-g', label='Force')
-        plt.plot(time, speed, '-g', label='Speed')
-
-        plt.grid()
-        plt.legend(loc='upper right')
-        plt.xlabel('Nodes removed')
-        plt.ylabel('Max connected component')
-        plt.title('Graph resilience under random order attack')
-
-        plt.savefig(os.path.join(out_dir, 'damper_{}.svg'.format(key)))
+                if not experiment_sets[current_experiment_set][current_experiment].get(key, None):
+                    experiment_sets[current_experiment_set][current_experiment][key] = []
+                experiment_sets[current_experiment_set][current_experiment][key].append(value)
+    return experiment_sets
 
 
 def plot_on_one(experiments, out_dir):
@@ -132,4 +114,8 @@ if __name__ == '__main__':
         exit(1)
 
     data = load_file(args.input)
-    plot_on_one(data, args.out)
+    for experiment_set, experiment_data in data.items():
+        out_dir = os.path.join(args.out, experiment_set)
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+        plot_on_one(experiment_data, out_dir)
