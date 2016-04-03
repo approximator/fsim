@@ -21,7 +21,7 @@ import qbs.FileInfo
 
 QtAppProject {
     name: "fsim_app"
-    appName: "ForcesSimlation"
+    appName: "ForcesSimulation"
     appVersion: { major: 0; minor: 0; release: 2 }
 
     appSourceRoot: FileInfo.joinPaths(sourceDirectory, "../")

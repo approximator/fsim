@@ -14,15 +14,15 @@ environment:
     TAKE_SCREENSHOT: echo "Not implemented yet"
   - BUILD_VARIANT: release
     ADDITIONAL_PARAMS: "qbs.installRoot:%APPVEYOR_BUILD_FOLDER%\\install project.justRunExperiments:true"
-    TAKE_SCREENSHOT: "%INSTALL_DIR%\\ForcesSimlation\\ForcesSimlation && python %APPVEYOR_BUILD_FOLDER%\\scripts\\plot.py --input %APPVEYOR_BUILD_FOLDER%\\fsim_data --out %INSTALL_DIR%\\screenshots"
+    TAKE_SCREENSHOT: "%INSTALL_DIR%\\ForcesSimulation\\ForcesSimulation && python %APPVEYOR_BUILD_FOLDER%\\scripts\\plot.py --input %APPVEYOR_BUILD_FOLDER%\\fsim_data --out %INSTALL_DIR%\\screenshots"
     INSTALL_MATPLOTLIB: yes
 
 install:
   - cmd: git submodule update --init --recursive
   - cmd: curl -fsS -o rclone.zip http://downloads.rclone.org/rclone-v1.28-windows-386.zip && 7z e rclone.zip
   - cmd: set PATH=%PYTHON%;%PYTHON%\Scripts;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%;%cd%;%cd%\rclone-v1.28-windows-386
-  - cmd: set FSIM_DIR=%INSTALL_DIR%\\ForcesSimlation
-  - cmd: set FSIM_EXECUTABLE=%FSIM_DIR%\ForcesSimlation
+  - cmd: set FSIM_DIR=%INSTALL_DIR%\\ForcesSimulation
+  - cmd: set FSIM_EXECUTABLE=%FSIM_DIR%\ForcesSimulation
   - cmd: set SCRIPTS_DIR=%APPVEYOR_BUILD_FOLDER%\scripts
   - cmd: set FSIM_DATA_FILE_NAME=%APPVEYOR_BUILD_FOLDER%\fsim_data
   - cmd: set SCREENSHOTS_DIR=%INSTALL_DIR%\screenshots
