@@ -42,7 +42,10 @@ def load_file(file_name):
             for data in line.split(' '):
                 key, value = data.split(':')
                 # print(key + '=' + value)
-                temp_data[key] = float(value)
+                try:
+                    temp_data[key] = float(value)
+                except ValueError as ex:
+                    print('Warning. Can not convert value "{}" of {} to float'.format(value, key))
             current_experiment = temp_data['damper']
 
             if prev_experiment != current_experiment:
