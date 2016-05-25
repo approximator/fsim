@@ -59,22 +59,48 @@ public:
         qDebug() << "Output file: " << filename;
         QDir().remove(filename);
 
-        TSimWorld world;
-        static const double dampers[]   = { DAMPERS };
-        static const int experimentsNum = sizeof(dampers) / sizeof(dampers[0]);
+        {
+            LOG_EXPERIMENT_DATA("New experiment: polinomial");
+            TSimWorld world;
+            world.setInteractionFunction(&TInteractionFunctions::polinomial);
+            static const double dampers[]   = { DAMPERS };
+            static const int experimentsNum = sizeof(dampers) / sizeof(dampers[0]);
 
-        int ticsNum = 12000;
-        for (int experiment = 0; experiment < experimentsNum; ++experiment) {
-            world.set_damperCoefficient(dampers[experiment]);
+            int ticsNum = 12000;
+            for (int experiment = 0; experiment < experimentsNum; ++experiment) {
+                world.set_damperCoefficient(dampers[experiment]);
 
-            world.model()->clear();
-            auto point = world.addPoint(12, 3.94);
-            point      = world.addPoint(14, 4.94);
-            point->clearVisibleObjectsList();
-            for (int tic = 0; tic < ticsNum; ++tic) {
-                world.update();
+                world.model()->clear();
+                auto point = world.addPoint(12, 3.94);
+                point      = world.addPoint(14, 4.94);
+                point->clearVisibleObjectsList();
+                for (int tic = 0; tic < ticsNum; ++tic) {
+                    world.update();
+                }
             }
         }
+
+        {
+            TSimWorld world;
+            LOG_EXPERIMENT_DATA("New experiment: linear");
+            world.setInteractionFunction(&TInteractionFunctions::linear);
+            static const double dampers[]   = { 0.01, 0.05, 0.1, 0.5 };
+            static const int experimentsNum = sizeof(dampers) / sizeof(dampers[0]);
+
+            int ticsNum = 12000;
+            for (int experiment = 0; experiment < experimentsNum; ++experiment) {
+                world.set_damperCoefficient(dampers[experiment]);
+
+                world.model()->clear();
+                auto point = world.addPoint(12, 3.94);
+                point      = world.addPoint(14, 4.94);
+                point->clearVisibleObjectsList();
+                for (int tic = 0; tic < ticsNum; ++tic) {
+                    world.update();
+                }
+            }
+        }
+
         return 0;
     }
 };

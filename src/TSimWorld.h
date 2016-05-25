@@ -60,6 +60,8 @@ public:
     Q_INVOKABLE void update();
     Q_INVOKABLE void clean();
 
+    Q_INVOKABLE void setInteractionFunction(const TInteractionFunction& func);
+
 private:
     TSimWorld(const TSimWorld &other) = delete;
     TSimWorld &operator=(const TSimWorld &other) = delete;
