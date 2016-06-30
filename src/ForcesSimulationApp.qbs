@@ -18,36 +18,27 @@
 
 import qbs
 import qbs.FileInfo
+import QmlTools
 
-CppApplicationBase {
-    targetName: project.appAppTarget
+QmlTools.QtQmlApplication {
+    name: "Forces_Simulation"
+    appShortName: "fsim"
 
+    Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["qml", "quick", "gui", "svg"] }
-    Depends { name: "qml_material" }
     Depends { name: "libqtqmltricks-qtqmlmodels" }
     Depends { name: "libqtqmltricks-qtsupermacros" }
+
+    qmlImportsPaths: [
+        FileInfo.joinPaths(project.appSourceRoot, "modules", "qml-material", "modules")
+    ]
+
+    cpp.defines: generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
 
     Group {
         name: "Sources"
         files: [
-            "*.cpp",
-            "*.h"
+            "**"
         ]
     }
-
-    Group {
-        name: "resources"
-        files: "*.qrc"
-    }
-
-    cpp.defines: {
-        var defines = project.generalDefines;
-        defines.push('QTQMLTRICKS_NO_PREFIX_ON_GETTERS');
-        if(project.justRunExperiments)
-            defines.push('JUST_RUN_EXPERIMENTS')
-        return defines.concat()
-    }
-
-    targetInstallDir: project.appInstallDir
-    targetInstallPrefix: project.appBinDir
 }
