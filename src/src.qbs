@@ -18,15 +18,13 @@
 
 import qbs
 import qbs.FileInfo
+import QmlTools
 
-QtAppProject {
+QmlTools.QtQmlApplication {
     name: "fsim_app"
-    appName: "ForcesSimulation"
-    appVersion: { major: 0; minor: 0; release: 2 }
+    appShortName: "fsim"
 
-    appSourceRoot: FileInfo.joinPaths(sourceDirectory, "../")
-    references: [
-        "ForcesSimulationApp.qbs",
-        "../modules/modules.qbs"
-    ]
+
+//    appSourceRoot: FileInfo.joinPaths(sourceDirectory, "../")
+
 }

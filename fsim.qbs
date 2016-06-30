@@ -23,10 +23,12 @@ Project {
     name: "fsim_project"
 
     property bool justRunExperiments: false
+    property path appSourceRoot: sourceDirectory
 
     qbsSearchPaths: "modules/Qt-Qbs-Application/qbs"
 
     references: [
-        "src/src.qbs"
+        "src/ForcesSimulationApp.qbs",
+        "modules/modules.qbs",
     ]
 }
