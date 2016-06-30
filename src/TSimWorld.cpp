@@ -29,7 +29,7 @@ TSimWorld::TSimWorld(QObject *parent)
     , m_model(new TPointsModel(this, "x", "y"))
     , m_screen(new TScreen(this))
     , m_selectedPoint(nullptr)
-    , m_gravity(1)
+    , m_gravity(100)
     , m_damperCoefficient(0.4)
 {
     qRegisterMetaType<TPoint *>("TPoint*");

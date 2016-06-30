@@ -27,6 +27,8 @@
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QtQml>
+#include <QQuickView>
+#include <QOpenGLContext>
 
 int main(int argc, char *argv[])
 {
@@ -49,13 +51,24 @@ int main(int argc, char *argv[])
     return ExperimentRunner().run();
 #endif
 
-    QQmlApplicationEngine engine;
-
-    QString qmlFilesPath = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), APP_QML_MODULES_PATH);
-    engine.addImportPath(qmlFilesPath);
     qmlRegisterType<TSimWorld>("sim.world", 1, 0, "World");
     qRegisterMetaType<TPointsModel *>("TPointsModel*");
-    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+    QSurfaceFormat format;
+    if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL) {
+        format.setVersion(3, 2);
+        format.setProfile(QSurfaceFormat::CoreProfile);
+    }
+    format.setDepthBufferSize(24);
+    format.setStencilBufferSize(8);
+    format.setSamples(4);
+
+    QQuickView view;
+    view.setFormat(format);
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    view.setSource(QUrl("qrc:/qml/main.qml"));
+    view.setColor("#000000");
+    view.show();
 
     return app.exec();
 }
