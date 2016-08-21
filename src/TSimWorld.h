@@ -27,7 +27,6 @@
 #include "QQmlObjectListModel.h"
 #include "TInteractionFunctions.h"
 #include "TPoint.h"
-#include "TScreen.h"
 
 #include <QList>
 #include <QObject>
@@ -39,7 +38,6 @@ class TSimWorld : public QObject
 {
     Q_OBJECT
     QML_READONLY_AUTO_PROPERTY(TPointsModel *, model)
-    QML_READONLY_AUTO_PROPERTY(TScreen *, screen)
     QML_WRITABLE_AUTO_PROPERTY(TPoint *, selectedPoint)
     QML_WRITABLE_AUTO_PROPERTY(qreal, gravity)
     QML_WRITABLE_AUTO_PROPERTY(qreal, damperCoefficient)
@@ -48,13 +46,6 @@ public:
     typedef std::function<int(TSimWorld *)> TInteractionFunction;
 
     explicit TSimWorld(QObject *parent = 0);
-
-    Q_INVOKABLE TPoint *getPointAt(qreal _x, qreal _y) const;
-
-    Q_INVOKABLE qreal xToScreen(qreal xPos) const;
-    Q_INVOKABLE qreal yToScreen(qreal yPos) const;
-    Q_INVOKABLE qreal xToWorld(qreal xPos) const;
-    Q_INVOKABLE qreal yToWorld(qreal yPos) const;
 
     Q_INVOKABLE TPoint *addPoint(qreal _x, qreal _y);
     Q_INVOKABLE void update();

@@ -27,45 +27,13 @@
 TSimWorld::TSimWorld(QObject *parent)
     : QObject(parent)
     , m_model(new TPointsModel(this, "x", "y"))
-    , m_screen(new TScreen(this))
     , m_selectedPoint(nullptr)
     , m_gravity(100)
     , m_damperCoefficient(0.4)
 {
     qRegisterMetaType<TPoint *>("TPoint*");
-    qRegisterMetaType<TScreen *>("TScreen*");
 
     connect(this, &TSimWorld::damperCoefficientChanged, [this]() { qDebug() << "Damper = " << damperCoefficient(); });
-}
-
-TPoint *TSimWorld::getPointAt(qreal _x, qreal _y) const
-{
-    const int eps = 5;  // 5 screen dots
-    for (const auto &point : *m_model)
-        if (std::fabs(xToScreen(point->x()) - xToScreen(_x)) < eps
-            && std::fabs(yToScreen(point->y()) - yToScreen(_y)) < eps)
-            return point;
-    return nullptr;
-}
-
-qreal TSimWorld::xToScreen(qreal xPos) const
-{
-    return xPos * m_screen->scale() + m_screen->offsetX();
-}
-
-qreal TSimWorld::yToScreen(qreal yPos) const
-{
-    return m_screen->height() - yPos * m_screen->scale() + m_screen->offsetY();
-}
-
-qreal TSimWorld::xToWorld(qreal xPos) const
-{
-    return (xPos - m_screen->offsetX()) / m_screen->scale();
-}
-
-qreal TSimWorld::yToWorld(qreal yPos) const
-{
-    return (m_screen->height() - yPos + m_screen->offsetY()) / m_screen->scale();
 }
 
 TPoint *TSimWorld::addPoint(qreal _x, qreal _y)
