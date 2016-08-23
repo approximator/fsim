@@ -17,10 +17,14 @@ addons:
       - tree
 
 before_script:
-  - INSTALL_DIR=/tmp/fsim/docker
+  - export APP_DIR_NAME=Forces_Simulation
+  - export APP_NAME=fsim
+  - export SRC_DIR=${TRAVIS_BUILD_DIR}
+  - export INSTALL_DIR=/tmp/fsim/docker
+  - export SCRIPTS_DIR=${SRC_DIR}/modules/Qt-Qbs-Application/scripts
 
 script:
-  - ./scripts/build_in_docker.sh
+  - ${SCRIPTS_DIR}/build_in_docker.sh
   - tree -L 5 ${INSTALL_DIR}
-  - docker run --rm -v ${INSTALL_DIR}:/fsim -v $PWD/modules/Qt-Qbs-Application/scripts:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fsim/install/Forces_Simulation/fsim -t 55 -o /fsim/install/Forces_Simulation/screenshot.png
+  - docker run --rm -v ${INSTALL_DIR}:/fsim -v ${SCRIPTS_DIR}:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fsim/install/${APP_DIR_NAME}/${APP_NAME} -t 55 -o /fsim/install/${APP_DIR_NAME}/screenshot.png
   - tree -L 5 ${INSTALL_DIR}
