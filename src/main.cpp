@@ -27,6 +27,8 @@
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QtQml>
+#include <QQuickView>
+#include <QOpenGLContext>
 
 int main(int argc, char *argv[])
 {
@@ -49,13 +51,14 @@ int main(int argc, char *argv[])
     return ExperimentRunner().run();
 #endif
 
-    QQmlApplicationEngine engine;
-
     QString qmlFilesPath = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), APP_QML_MODULES_PATH);
+    QQmlApplicationEngine engine;
     engine.addImportPath(qmlFilesPath);
+
     qmlRegisterType<TSimWorld>("sim.world", 1, 0, "World");
     qRegisterMetaType<TPointsModel *>("TPointsModel*");
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
 
     return app.exec();
 }

@@ -23,32 +23,26 @@
 
 #include <QDebug>
 
-TPoint::TPoint(const uint _id, const qreal _x, const qreal _y, QObject *parent)
+TPoint::TPoint(const uint _id, const qreal _x, const qreal _y, const qreal _z, QObject *parent)
     : QObject(parent)
     , m_point_id(_id)
-    , m_x(_x)
-    , m_y(_y)
+    , m_location(_x, _y, _z)
     , m_mass(1.0)
     , m_obstacle(false)
     , m_force()
-    , m_ownForce(0, 0)
-    , m_speed(0, 0)
-    , m_acceleration(0, 0)
+    , m_ownForce(0, 0, 0)
+    , m_speed(0, 0, 0)
+    , m_acceleration(0, 0, 0)
     , m_criticalRadius(1)
     , m_acceptNewPoints(true)
     , m_visibleObjects()
 {
-    qDebug() << "Added point [" << point_id() << "]: " << _x << ", " << _y;
+    qDebug() << "Added point [" << point_id() << "]: " << location();
 }
 
 TPoint::~TPoint()
 {
     qDebug() << "Deleted point: " << point_id();
-}
-
-QVector2D TPoint::position() const
-{
-    return QVector2D(m_x, m_y);
 }
 
 void TPoint::set_acceleration(const qreal _x, const qreal _y)

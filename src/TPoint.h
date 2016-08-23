@@ -26,37 +26,35 @@
 
 #include <QDebug>
 #include <QObject>
-#include <QVector2D>
+#include <QVector3D>
 
 class TPoint : public QObject
 {
     Q_OBJECT
     QML_WRITABLE_AUTO_PROPERTY(int, point_id)
-    QML_WRITABLE_AUTO_PROPERTY(qreal, x)
-    QML_WRITABLE_AUTO_PROPERTY(qreal, y)
+    QML_WRITABLE_AUTO_PROPERTY(QVector3D, location)
     QML_WRITABLE_AUTO_PROPERTY(qreal, mass)
     QML_WRITABLE_AUTO_PROPERTY(bool, obstacle)
-    QML_WRITABLE_AUTO_PROPERTY(QVector2D, force)
-    QML_WRITABLE_AUTO_PROPERTY(QVector2D, ownForce)
-    QML_WRITABLE_AUTO_PROPERTY(QVector2D, speed)
-    QML_WRITABLE_AUTO_PROPERTY(QVector2D, acceleration)
+    QML_WRITABLE_AUTO_PROPERTY(QVector3D, force)
+    QML_WRITABLE_AUTO_PROPERTY(QVector3D, ownForce)
+    QML_WRITABLE_AUTO_PROPERTY(QVector3D, speed)
+    QML_WRITABLE_AUTO_PROPERTY(QVector3D, acceleration)
     QML_WRITABLE_AUTO_PROPERTY(qreal, criticalRadius)
     QML_WRITABLE_AUTO_PROPERTY(bool, acceptNewPoints)
 
 public:
-    explicit TPoint(const uint id, const qreal _x, const qreal _y, QObject* parent = 0);
+    explicit TPoint(const uint id, const qreal _x, const qreal _y, const qreal _z, QObject *parent = 0);
     ~TPoint();
 
-    QVector2D position() const;
     void set_acceleration(const qreal _x, const qreal _y);
     void set_speed(const qreal _x, const qreal _y);
 
-    Q_INVOKABLE void addVisibleObject(TPoint* point);
-    Q_INVOKABLE const QList<TPoint*>& visibleObjects() const;
+    Q_INVOKABLE void addVisibleObject(TPoint *point);
+    Q_INVOKABLE const QList<TPoint *> &visibleObjects() const;
     Q_INVOKABLE void clearVisibleObjectsList();
 
 private:
-    QList<TPoint*> m_visibleObjects;
+    QList<TPoint *> m_visibleObjects;
 };
 
 #endif  // TPOINT_H

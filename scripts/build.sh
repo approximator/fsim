@@ -50,9 +50,11 @@ python -u ${DEPLOY_SCRIPT}                                                     \
           --debug-build   $BUILD_VARIANT                                       \
           --libs          Qt5Core Qt5Widgets Qt5Gui Qt5Qml Qt5Quick Qt5Network \
                           Qt5DBus Qt5Svg Qt5XcbQpa icudata icui18n icuuc pcre  \
-          --qt-plugins    iconengines imageformats platforms                   \
+                          Qt53DCore Qt53DRender Qt53DInput Qt53DLogic          \
+                          Qt53DExtras Qt5Gamepad Qt5Concurrent Qt53DQuick      \
+          --qt-plugins    iconengines imageformats platforms sceneparsers      \
                           platforminputcontexts xcbglintegrations              \
-          --qml           Qt QtQuick QtQuick.2 QtGraphicalEffects
+          --qml           Qt QtQuick QtQuick.2 QtGraphicalEffects Qt3D
 
 if [ $? -ne 0 ]; then
     echo "Deploy failed"

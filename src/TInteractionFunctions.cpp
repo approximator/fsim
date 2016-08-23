@@ -43,17 +43,17 @@ inline qreal rungeKutta(const qreal h, const qreal val)
 int TInteractionFunctions::polinomial(TSimWorld *world)
 {
     for (int i = 0; i < 10; ++i) {
-        // Update forces and positions
+        // Update forces and locations
         for (auto &point : *(world->model())) {
 
-            point->set_force(QVector2D(0, 0));
+            point->set_force(QVector3D(0, 0, 0));
             for (auto &otherPoint : point->visibleObjects()) {
                 if (point == otherPoint) {
                     continue;
                 }
 
-                const qreal distance = point->position().distanceToPoint(otherPoint->position());  // distance
-                QVector2D Fij        = (otherPoint->position() - point->position()).normalized();  // Force direction
+                const qreal distance = point->location().distanceToPoint(otherPoint->location());  // distance
+                QVector3D Fij        = (otherPoint->location() - point->location()).normalized();  // Force direction
 
                 const qreal criticalRadius = (point->criticalRadius() + otherPoint->criticalRadius());
 
@@ -77,75 +77,97 @@ int TInteractionFunctions::polinomial(TSimWorld *world)
 
             point->set_force(point->force() + point->ownForce());
 
-            // Update point position
+            // Update point location
 
             const qreal udx = -world->damperCoefficient() * point->speed().x();
             const qreal udy = -world->damperCoefficient() * point->speed().y();
+            const qreal udz = -world->damperCoefficient() * point->speed().z();
 
             point->set_acceleration(  // d^2x/dt^2 = 1/m * (F + (u * dx/dt))
-                (point->force().x() + udx) / point->mass(), (point->force().y() + udy) / point->mass());
+                QVector3D((point->force().x() + udx) / point->mass(), (point->force().y() + udy) / point->mass(),
+                    (point->force().z() + udz) / point->mass()));
 
             const qreal h = 0.0005;
-            point->set_speed(point->speed().x() + rungeKutta(h, point->acceleration().x()),
-                point->speed().y() + rungeKutta(h, point->acceleration().y()));
+            point->set_speed(QVector3D(point->speed().x() + rungeKutta(h, point->acceleration().x()),
+                point->speed().y() + rungeKutta(h, point->acceleration().y()),
+                point->speed().z() + rungeKutta(h, point->acceleration().z())));
 
-            point->set_x(point->x() + rungeKutta(h, point->speed().x()));
-            point->set_y(point->y() + rungeKutta(h, point->speed().y()));
+            point->set_location(QVector3D(point->location().x() + rungeKutta(h, point->speed().x()),
+                point->location().y() + rungeKutta(h, point->speed().y()),
+                point->location().z() + rungeKutta(h, point->speed().z())));
         }
     }
     return 0;
 }
 
-int TInteractionFunctions::linear(TSimWorld *world)
-{
-    for (int i = 0; i < 10; ++i) {
-        // Update forces and positions
-        for (auto &point : *(world->model())) {
-            point->set_force(QVector2D(0, 0));
-            for (auto &otherPoint : point->visibleObjects()) {
-                if (point == otherPoint) {
-                    continue;
-                }
+// int TInteractionFunctions::linear(TSimWorld *world)
+//{
+//    for (int i = 0; i < 10; ++i) {
+//        // Update forces and locations
+//        for (auto &point : *(world->model())) {
+//            point->set_force(QVector2D(0, 0));
+//            for (auto &otherPoint : point->visibleObjects()) {
+//                if (point == otherPoint) {
+//                    continue;
+//                }
 
-                const qreal distance = point->position().distanceToPoint(otherPoint->position());  // distance
-                QVector2D Fij        = (otherPoint->position() - point->position()).normalized();  // Force direction
+//                const qreal distance =
+//                point->location().distanceToPoint(otherPoint->location());  //
+//                distance
+//                QVector2D Fij        = (otherPoint->location() -
+//                point->location()).normalized();  // Force direction
 
-                const qreal criticalRadius = (point->criticalRadius() + otherPoint->criticalRadius());
+//                const qreal criticalRadius = (point->criticalRadius() +
+//                otherPoint->criticalRadius());
 
-                qreal attractiveForce = 0;
-                if (!otherPoint->obstacle())
-                    attractiveForce = 3 * distance + criticalRadius;  //
+//                qreal attractiveForce = 0;
+//                if (!otherPoint->obstacle())
+//                    attractiveForce = 3 * distance + criticalRadius;  //
 
-                const qreal repulsiveForce = 2 * distance + criticalRadius;  //
-                const qreal forceMagnitude = -world->gravity() * (attractiveForce - repulsiveForce);
-                Fij *= forceMagnitude;                   // forceDirection * forceMagnitude
-                point->set_force(point->force() + Fij);  // Fi = Fi + Fij
+//                const qreal repulsiveForce = 2 * distance + criticalRadius; //
+//                const qreal forceMagnitude = -world->gravity() *
+//                (attractiveForce - repulsiveForce);
+//                Fij *= forceMagnitude;                   // forceDirection *
+//                forceMagnitude
+//                point->set_force(point->force() + Fij);  // Fi = Fi + Fij
 
-                if (point->point_id() == 0) {
-                    LOG_EXPERIMENT_DATA("distance:" << distance << " force:" << forceMagnitude
-                                                    << " acceleration:" << point->acceleration().length() << " speed:"
-                                                    << point->speed().length() << " gravity:" << world->gravity()
-                                                    << " damper:" << world->damperCoefficient());
-                }
-            }
+//                if (point->point_id() == 0) {
+//                    LOG_EXPERIMENT_DATA("distance:" << distance << " force:"
+//                    << forceMagnitude
+//                                                    << " acceleration:" <<
+//                                                    point->acceleration().length()
+//                                                    << " speed:"
+//                                                    << point->speed().length()
+//                                                    << " gravity:" <<
+//                                                    world->gravity()
+//                                                    << " damper:" <<
+//                                                    world->damperCoefficient());
+//                }
+//            }
 
-            point->set_force(point->force() + point->ownForce());
+//            point->set_force(point->force() + point->ownForce());
 
-            // Update point position
+//            // Update point location
 
-            const qreal udx = -world->damperCoefficient() * point->speed().x();
-            const qreal udy = -world->damperCoefficient() * point->speed().y();
+//            const qreal udx = -world->damperCoefficient() *
+//            point->speed().x();
+//            const qreal udy = -world->damperCoefficient() *
+//            point->speed().y();
 
-            point->set_acceleration(  // d^2x/dt^2 = 1/m * (F + (u * dx/dt))
-                (point->force().x() + udx) / point->mass(), (point->force().y() + udy) / point->mass());
+//            point->set_acceleration(  // d^2x/dt^2 = 1/m * (F + (u * dx/dt))
+//                QVector2D((point->force().x() + udx) / point->mass(),
+//                (point->force().y() + udy) / point->mass()));
 
-            const qreal h = 0.0005;
-            point->set_speed(point->speed().x() + rungeKutta(h, point->acceleration().x()),
-                point->speed().y() + rungeKutta(h, point->acceleration().y()));
+//            const qreal h = 0.0005;
+//            point->set_speed(QVector2D(point->speed().x() + rungeKutta(h,
+//            point->acceleration().x()),
+//                point->speed().y() + rungeKutta(h,
+//                point->acceleration().y())));
 
-            point->set_x(point->x() + rungeKutta(h, point->speed().x()));
-            point->set_y(point->y() + rungeKutta(h, point->speed().y()));
-        }
-    }
-    return 0;
-}
+//            point->set_location(QVector2D(point->location().x() +
+//            rungeKutta(h, point->speed().x()),
+//            (point->location().y() + rungeKutta(h, point->speed().y()))));
+//        }
+//    }
+//    return 0;
+//}
