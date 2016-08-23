@@ -36,9 +36,9 @@ TSimWorld::TSimWorld(QObject *parent)
     connect(this, &TSimWorld::damperCoefficientChanged, [this]() { qDebug() << "Damper = " << damperCoefficient(); });
 }
 
-TPoint *TSimWorld::addPoint(qreal _x, qreal _y)
+TPoint *TSimWorld::addPoint(qreal _x, qreal _y, qreal _z)
 {
-    auto newPoint = new TPoint(m_model->count(), _x, _y, m_model);
+    auto newPoint = new TPoint(m_model->count(), _x, _y, _z, m_model);
     for (const auto &point : *m_model) {
         newPoint->addVisibleObject(point);
         point->addVisibleObject(newPoint);

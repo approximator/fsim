@@ -47,11 +47,11 @@ public:
 
     explicit TSimWorld(QObject *parent = 0);
 
-    Q_INVOKABLE TPoint *addPoint(qreal _x, qreal _y);
+    Q_INVOKABLE TPoint *addPoint(qreal _x, qreal _y, qreal _z);
     Q_INVOKABLE void update();
     Q_INVOKABLE void clean();
 
-    Q_INVOKABLE void setInteractionFunction(const TInteractionFunction& func);
+    Q_INVOKABLE void setInteractionFunction(const TInteractionFunction &func);
 
 private:
     TSimWorld(const TSimWorld &other) = delete;

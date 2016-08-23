@@ -22,7 +22,7 @@ Entity {
         aspectRatio: width / height
     }
 
-//    FirstPersonCameraController { camera: camera }
+    FirstPersonCameraController { camera: camera }
 
     components: [
         RenderSettings {
@@ -42,13 +42,13 @@ Entity {
             pointParametersDialog.show()
         }
         Component.onCompleted: {
-            var point = world.addPoint(2, 3.94)
-            point = world.addPoint(3, 4.94)
-            point = world.addPoint(4, 5.94)
-            point = world.addPoint(-5, -10)
-            point = world.addPoint(5, -10)
+            var point = world.addPoint(2, 3.94, -5)
+            point = world.addPoint(3, 4.94, 1)
+            point = world.addPoint(4, 5.94, 5)
+            point = world.addPoint(-5, -10, 1)
+            point = world.addPoint(5, -10, 1)
 
-            point = world.addPoint(0, 0)
+            point = world.addPoint(0, 0, 0)
             point.criticalRadius = 2
             point.mass = 20
             point.clearVisibleObjectsList()
@@ -61,7 +61,7 @@ Entity {
         model: world.model
         delegate: Body {
             parent: sceneRoot
-            position: Qt.vector3d(model.x, model.y, 0)
+            position: Qt.vector3d(model.location.x, model.location.y, model.location.z)
         }
     }
 
