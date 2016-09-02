@@ -1,7 +1,7 @@
 /*!
- * @file TPoint.cpp
+ * @file TObject.cpp
  *
- * @brief TPoint represents a point with it's own mass
+ * @brief TObject represents an object with it's own mass
  *
  *
  * Copyright © 2015-2016 Oleksii Aliakin (alex@nls.la)
@@ -19,18 +19,18 @@
  * limitations under the License.
  */
 
-#include "TPoint.h"
+#include "TObject.h"
 
 #include <QDebug>
 
-TPoint::TPoint(const uint _id, const qreal _x, const qreal _y, const qreal _z, QObject *parent)
+TObject::TObject(const uint _id, const QVector3D &initialLocation, QObject *parent)
     : QObject(parent)
+    , m_typeName("Object")
     , m_point_id(_id)
-    , m_location(_x, _y, _z)
+    , m_location(initialLocation)
     , m_mass(1.0)
-    , m_obstacle(false)
     , m_force()
-    , m_ownForce(0, 0, 0)
+    , m_engineForce(0, 0, 0)
     , m_speed(0, 0, 0)
     , m_acceleration(0, 0, 0)
     , m_criticalRadius(1)
@@ -40,35 +40,35 @@ TPoint::TPoint(const uint _id, const qreal _x, const qreal _y, const qreal _z, Q
     qDebug() << "Added point [" << point_id() << "]: " << location();
 }
 
-TPoint::~TPoint()
+TObject::~TObject()
 {
     qDebug() << "Deleted point: " << point_id();
 }
 
-void TPoint::set_acceleration(const qreal _x, const qreal _y)
+void TObject::set_acceleration(const qreal _x, const qreal _y)
 {
     m_acceleration.setX(_x);
     m_acceleration.setY(_y);
 }
 
-void TPoint::set_speed(const qreal _x, const qreal _y)
+void TObject::set_speed(const qreal _x, const qreal _y)
 {
     m_speed.setX(_x);
     m_speed.setY(_y);
 }
 
-void TPoint::addVisibleObject(TPoint *point)
+void TObject::addVisibleObject(TObject *point)
 {
     if (m_acceptNewPoints)
         m_visibleObjects.append(point);
 }
 
-const QList<TPoint *> &TPoint::visibleObjects() const
+const QList<TObject *> &TObject::visibleObjects() const
 {
     return m_visibleObjects;
 }
 
-void TPoint::clearVisibleObjectsList()
+void TObject::clearVisibleObjectsList()
 {
     m_visibleObjects.clear();
 }

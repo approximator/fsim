@@ -26,19 +26,19 @@
 #include "QQmlAutoPropertyHelpers.h"
 #include "QQmlObjectListModel.h"
 #include "TInteractionFunctions.h"
-#include "TPoint.h"
+#include "objects/TObject.h"
 
 #include <QList>
 #include <QObject>
 #include <functional>
 
-typedef QQmlObjectListModel<TPoint> TPointsModel;
+typedef QQmlObjectListModel<TObject> TObjectsModel;
 
 class TSimWorld : public QObject
 {
     Q_OBJECT
-    QML_READONLY_AUTO_PROPERTY(TPointsModel *, model)
-    QML_WRITABLE_AUTO_PROPERTY(TPoint *, selectedPoint)
+    QML_READONLY_AUTO_PROPERTY(TObjectsModel *, model)
+    QML_WRITABLE_AUTO_PROPERTY(TObject *, selectedPoint)
     QML_WRITABLE_AUTO_PROPERTY(qreal, gravity)
     QML_WRITABLE_AUTO_PROPERTY(qreal, damperCoefficient)
 
@@ -47,7 +47,7 @@ public:
 
     explicit TSimWorld(QObject *parent = 0);
 
-    Q_INVOKABLE TPoint *addPoint(qreal _x, qreal _y, qreal _z);
+    Q_INVOKABLE TObject *addObject(const QString &type, const QVector3D &location);
     Q_INVOKABLE void update();
     Q_INVOKABLE void clean();
 

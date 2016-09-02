@@ -8,6 +8,8 @@ Entity {
 
     PhongMaterial {
         id: material
+        ambient: "green"
+        shininess: 1000
     }
 
     SphereMesh {

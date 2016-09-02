@@ -1,7 +1,7 @@
 /*!
- * @file TPoint.h
+ * @file TObject.h
  *
- * @brief TPoint represents a point with it's own mass
+ * @brief TObject represents an object with it's own mass
  *
  *
  * Copyright © 2015-2016 Oleksii Aliakin (alex@nls.la)
@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef TPOINT_H
-#define TPOINT_H
+#ifndef TOBJECT_H
+#define TOBJECT_H
 
 #include "QQmlAutoPropertyHelpers.h"
 
@@ -28,33 +28,33 @@
 #include <QObject>
 #include <QVector3D>
 
-class TPoint : public QObject
+class TObject : public QObject
 {
     Q_OBJECT
+    QML_WRITABLE_AUTO_PROPERTY(QString, typeName)
     QML_WRITABLE_AUTO_PROPERTY(int, point_id)
     QML_WRITABLE_AUTO_PROPERTY(QVector3D, location)
     QML_WRITABLE_AUTO_PROPERTY(qreal, mass)
-    QML_WRITABLE_AUTO_PROPERTY(bool, obstacle)
     QML_WRITABLE_AUTO_PROPERTY(QVector3D, force)
-    QML_WRITABLE_AUTO_PROPERTY(QVector3D, ownForce)
+    QML_WRITABLE_AUTO_PROPERTY(QVector3D, engineForce)
     QML_WRITABLE_AUTO_PROPERTY(QVector3D, speed)
     QML_WRITABLE_AUTO_PROPERTY(QVector3D, acceleration)
     QML_WRITABLE_AUTO_PROPERTY(qreal, criticalRadius)
     QML_WRITABLE_AUTO_PROPERTY(bool, acceptNewPoints)
 
 public:
-    explicit TPoint(const uint id, const qreal _x, const qreal _y, const qreal _z, QObject *parent = 0);
-    ~TPoint();
+    explicit TObject(const uint id, const QVector3D &initialLocation = QVector3D(), QObject *parent = 0);
+    ~TObject();
 
     void set_acceleration(const qreal _x, const qreal _y);
     void set_speed(const qreal _x, const qreal _y);
 
-    Q_INVOKABLE void addVisibleObject(TPoint *point);
-    Q_INVOKABLE const QList<TPoint *> &visibleObjects() const;
+    Q_INVOKABLE void addVisibleObject(TObject *point);
+    Q_INVOKABLE const QList<TObject *> &visibleObjects() const;
     Q_INVOKABLE void clearVisibleObjectsList();
 
 private:
-    QList<TPoint *> m_visibleObjects;
+    QList<TObject *> m_visibleObjects;
 };
 
-#endif  // TPOINT_H
+#endif  // TOBJECT_H
