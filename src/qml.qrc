@@ -1,9 +1,11 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/main.qml</file>
-        <file>qml/CanvasPage.qml</file>
-        <file>qml/LabeledTextEdit.qml</file>
-        <file>qml/Scene.qml</file>
-        <file>qml/Body.qml</file>
+        <file>gui/qml/main.qml</file>
+        <file>gui/qml/CanvasPage.qml</file>
+        <file>gui/qml/LabeledTextEdit.qml</file>
+        <file>gui/qml/Scene.qml</file>
+        <file>gui/qml/Obstacle.qml</file>
+        <file>gui/qml/Sphere.qml</file>
+        <file>gui/qml/Target.qml</file>
     </qresource>
 </RCC>

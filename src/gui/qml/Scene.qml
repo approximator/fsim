@@ -28,7 +28,7 @@ Entity {
         RenderSettings {
             activeFrameGraph: ForwardRenderer {
                 camera: camera
-                clearColor: "transparent"
+                clearColor: Qt.rgba(0.5, 0.7, 1, 1)
             }
         },
         InputSettings { }
@@ -42,26 +42,30 @@ Entity {
             pointParametersDialog.show()
         }
         Component.onCompleted: {
-            var point = world.addPoint(2, 3.94, -5)
-            point = world.addPoint(3, 4.94, 1)
-            point = world.addPoint(4, 5.94, 5)
-            point = world.addPoint(-5, -10, 1)
-            point = world.addPoint(5, -10, 1)
+            var point = world.addObject("Sphere", Qt.vector3d(2, 3.94, -5))
+            point = world.addObject("Sphere", Qt.vector3d(3, 4.94, 1))
+            point = world.addObject("Sphere", Qt.vector3d(4, 5.94, 5))
+            point = world.addObject("Sphere", Qt.vector3d(-2, -10, 1))
+            point = world.addObject("Sphere", Qt.vector3d(2, -10, 1))
 
-            point = world.addPoint(0, 0, 0)
+            point = world.addObject("Obstacle", Qt.vector3d(0, -5, 0.5))
+
+            point = world.addObject("Target", Qt.vector3d(0, 0, 0))
             point.criticalRadius = 2
             point.mass = 20
-            point.clearVisibleObjectsList()
-            point.acceptNewPoints = false
             world.damperCoefficient = 3
         }
     }
 
     NodeInstantiator {
         model: world.model
-        delegate: Body {
-            parent: sceneRoot
-            position: Qt.vector3d(model.location.x, model.location.y, model.location.z)
+        delegate: Entity {
+            id: factoryItem
+            Component.onCompleted: {
+                var component = Qt.createComponent(Qt.resolvedUrl(model.typeName + ".qml"))
+                var obj = component.createObject(factoryItem);
+                obj.position = Qt.binding(function() { return model.location });
+            }
         }
     }
 
@@ -73,6 +77,7 @@ Entity {
 
         onTriggered: {
             world.update()
+            // console.log("Update")
         }
     }
 }

@@ -37,7 +37,7 @@ build_script:
 
     dir %INSTALL_DIR%
 
-    windeployqt --%BUILD_VARIANT% --no-system-d3d-compiler --no-translations --no-qmltooling --qmldir %APPVEYOR_BUILD_FOLDER%\src\qml %FSIM_DIR%
+    windeployqt --%BUILD_VARIANT% --no-system-d3d-compiler --no-translations --no-qmltooling --qmldir %APPVEYOR_BUILD_FOLDER%\src\gui\qml %FSIM_DIR%
 
 # copy deployed files to needed locations (will be fixed in the future)
 - cmd: >-
@@ -57,5 +57,7 @@ build_script:
     python -u %APPVEYOR_BUILD_FOLDER%\\modules\\Qt-Qbs-Application\\scripts\\take_screenshot.py -f %INSTALL_DIR%\\Forces_Simulation\\fsim.exe -t 55 -o %SCREENSHOTS_DIR%\\screenshot.png
 
 artifacts:
+- path: install\screenshot.png
+  name: screenshot
 - path: install
   name: Forces_Simulation

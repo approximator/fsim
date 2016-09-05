@@ -24,11 +24,11 @@
 #include "experiment_runner.h"
 
 #include <QGuiApplication>
+#include <QOpenGLContext>
 #include <QQmlApplicationEngine>
+#include <QQuickView>
 #include <QSettings>
 #include <QtQml>
-#include <QQuickView>
-#include <QOpenGLContext>
 
 int main(int argc, char *argv[])
 {
@@ -56,9 +56,8 @@ int main(int argc, char *argv[])
     engine.addImportPath(qmlFilesPath);
 
     qmlRegisterType<TSimWorld>("sim.world", 1, 0, "World");
-    qRegisterMetaType<TPointsModel *>("TPointsModel*");
-    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-
+    qRegisterMetaType<TObjectsModel *>("TObjectsModel*");
+    engine.load(QUrl(QStringLiteral("qrc:/gui/qml/main.qml")));
 
     return app.exec();
 }

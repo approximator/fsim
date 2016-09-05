@@ -58,8 +58,7 @@ int TInteractionFunctions::polinomial(TSimWorld *world)
                 const qreal criticalRadius = (point->criticalRadius() + otherPoint->criticalRadius());
 
                 qreal attractiveForce = 0;
-                if (!otherPoint->obstacle())
-                    attractiveForce = point->mass() * otherPoint->mass() / qPow(distance, 2);  //        mi * mj / d^2
+                attractiveForce       = point->mass() * otherPoint->mass() / qPow(distance, 2);  //        mi * mj / d^2
 
                 const qreal repulsiveForce
                     = criticalRadius * point->mass() * otherPoint->mass() / qPow(distance, 3);  //  Rcr * mi * mj / d^3
@@ -75,7 +74,7 @@ int TInteractionFunctions::polinomial(TSimWorld *world)
                 }
             }
 
-            point->set_force(point->force() + point->ownForce());
+            point->set_force(point->force() + point->engineForce());
 
             // Update point location
 

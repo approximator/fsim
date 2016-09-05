@@ -23,23 +23,44 @@
 
 #include "TSimWorld.h"
 #include "experiment_runner.h"
+#include "objects/TObstacle.h"
+#include "objects/TSphere.h"
+#include "objects/TTarget.h"
 
-TSimWorld::TSimWorld(QObject *parent)
+TSimWorld::TSimWorld(QObject* parent)
     : QObject(parent)
-    , m_model(new TPointsModel(this, "x", "y"))
+    , m_model(new TObjectsModel(this, "x", "y"))
     , m_selectedPoint(nullptr)
     , m_gravity(100)
     , m_damperCoefficient(0.4)
 {
-    qRegisterMetaType<TPoint *>("TPoint*");
+    qRegisterMetaType<TObject*>("TObject*");
 
     connect(this, &TSimWorld::damperCoefficientChanged, [this]() { qDebug() << "Damper = " << damperCoefficient(); });
 }
 
-TPoint *TSimWorld::addPoint(qreal _x, qreal _y, qreal _z)
+TObject* createObject(const QString& type, const QVector3D& location, int id, TObjectsModel* model)
 {
-    auto newPoint = new TPoint(m_model->count(), _x, _y, _z, m_model);
-    for (const auto &point : *m_model) {
+    if (type == "Object")
+        return new TObject(id, location, model);
+
+    if (type == "Sphere")
+        return new TSphere(id, location, model);
+
+    if (type == "Obstacle")
+        return new TObstacle(id, location, model);
+
+    if (type == "Target")
+        return new TTarget(id, location, model);
+
+    throw std::runtime_error("Unknown type");
+}
+
+TObject* TSimWorld::addObject(const QString& type, const QVector3D& location)
+{
+    auto newPoint = createObject(type, location, m_model->count(), m_model);
+
+    for (const auto& point : *m_model) {
         newPoint->addVisibleObject(point);
         point->addVisibleObject(newPoint);
     }
@@ -57,7 +78,7 @@ void TSimWorld::clean()
     m_model->clear();
 }
 
-void TSimWorld::setInteractionFunction(const TSimWorld::TInteractionFunction &func)
+void TSimWorld::setInteractionFunction(const TSimWorld::TInteractionFunction& func)
 {
     m_interactionFunc = func;
 }
