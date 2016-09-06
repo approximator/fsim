@@ -32,29 +32,38 @@ class TObject : public QObject
 {
     Q_OBJECT
     QML_WRITABLE_AUTO_PROPERTY(QString, typeName)
-    QML_WRITABLE_AUTO_PROPERTY(int, point_id)
+    QML_WRITABLE_AUTO_PROPERTY(int, object_id)
     QML_WRITABLE_AUTO_PROPERTY(QVector3D, location)
     QML_WRITABLE_AUTO_PROPERTY(qreal, mass)
-    QML_WRITABLE_AUTO_PROPERTY(QVector3D, force)
     QML_WRITABLE_AUTO_PROPERTY(QVector3D, engineForce)
     QML_WRITABLE_AUTO_PROPERTY(QVector3D, speed)
     QML_WRITABLE_AUTO_PROPERTY(QVector3D, acceleration)
     QML_WRITABLE_AUTO_PROPERTY(qreal, criticalRadius)
     QML_WRITABLE_AUTO_PROPERTY(bool, acceptNewPoints)
 
-public:
-    explicit TObject(const uint id, const QVector3D &initialLocation = QVector3D(), QObject *parent = 0);
-    ~TObject();
+    Q_PROPERTY(QVector3D force READ force WRITE set_force NOTIFY forceChanged)
 
-    void set_acceleration(const qreal _x, const qreal _y);
-    void set_speed(const qreal _x, const qreal _y);
+public:
+    explicit TObject(const uint id,
+                     const QVector3D &initialLocation = QVector3D(),
+                     QObject *parent = 0);
+    virtual ~TObject();
+
+    virtual void computeActingForces();
 
     Q_INVOKABLE void addVisibleObject(TObject *point);
     Q_INVOKABLE const QList<TObject *> &visibleObjects() const;
     Q_INVOKABLE void clearVisibleObjectsList();
 
+    QVector3D force();
+    bool set_force(const QVector3D &newForce);
+
 private:
+    QVector3D m_force;
     QList<TObject *> m_visibleObjects;
+
+Q_SIGNALS:
+    void forceChanged();
 };
 
 #endif  // TOBJECT_H
