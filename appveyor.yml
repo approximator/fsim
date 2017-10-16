@@ -17,7 +17,7 @@ install:
   - cmd: set PATH=%PYTHON%;%PYTHON%\Scripts;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%;%cd%;%cd%\rclone-v1.28-windows-386
   - cmd: set FSIM_DIR=%INSTALL_DIR%\\Forces_Simulation
   - cmd: set SCREENSHOTS_DIR=%INSTALL_DIR%
-  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide easyprocess Pillow pyscreenshot pyvirtualdisplay -V &&  pip install --upgrade --trusted-host wxpython.org --pre -f http://wxpython.org/Phoenix/snapshot-builds/ wxPython_Phoenix -V
+  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide easyprocess Pillow pyscreenshot pyvirtualdisplay -V &&  pip install --upgrade --pre -f https://wxpython.org/Phoenix/snapshot-builds/ wxPython -V
   - python --version
   - pip --version
 

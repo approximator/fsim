@@ -1,5 +1,5 @@
 /*!
-* Copyright © 2015-2016 Oleksii Aliakin. All rights reserved.
+* Copyright © 2015-2017 Oleksii Aliakin. All rights reserved.
 * Author: Oleksii Aliakin (alex@nls.la)
 * Author: Andrii Shelest
 *
@@ -29,11 +29,11 @@ QmlTools.QtQmlApplication {
     Depends { name: "libqtqmltricks-qtqmlmodels" }
     Depends { name: "libqtqmltricks-qtsupermacros" }
 
-    qmlImportsPaths: [
+    qmlImportPaths: [
         FileInfo.joinPaths(project.appSourceRoot, "modules", "qml-material", "modules")
     ]
 
-    cpp.defines: generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
+    generalDefines: ['QTQMLTRICKS_NO_PREFIX_ON_GETTERS']
 
     Group {
         name: "Sources"
