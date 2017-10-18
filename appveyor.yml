@@ -13,12 +13,11 @@ environment:
 
 install:
   - cmd: git submodule update --init --recursive
-  - cmd: curl -fsS -o rclone.zip http://downloads.rclone.org/rclone-v1.28-windows-386.zip && 7z e rclone.zip
+  - cmd: curl -fsS -o rclone.zip https://downloads.rclone.org/rclone-current-windows-amd64.zip && 7z e rclone.zip
   - cmd: set PATH=%PYTHON%;%PYTHON%\Scripts;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%;%cd%;%cd%\rclone-v1.28-windows-386
   - cmd: set FSIM_DIR=%INSTALL_DIR%\\Forces_Simulation
   - cmd: set SCREENSHOTS_DIR=%INSTALL_DIR%
-  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide easyprocess Pillow pyscreenshot pyvirtualdisplay -V &&  pip install --upgrade --trusted-host wxpython.org --pre -f http://wxpython.org/Phoenix/snapshot-builds/ wxPython_Phoenix -V
-  - cmd: IF DEFINED INSTALL_MATPLOTLIB ( pip install --upgrade --pre https://pypi.python.org/packages/cp34/m/matplotlib/matplotlib-1.5.1-cp34-none-win32.whl -V )
+  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide easyprocess Pillow pyscreenshot pyvirtualdisplay -V &&  pip install --upgrade --pre -f https://wxpython.org/Phoenix/snapshot-builds/ wxPython -V
   - python --version
   - pip --version
 

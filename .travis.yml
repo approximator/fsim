@@ -6,9 +6,8 @@ services:
 env:
     - BUILD_VARIANT=debug
     - BUILD_VARIANT=release
-    - QBS_VERSION=qbs:1.4.2.Qt5.7.0
-    - QBS_VERSION=qbs:1.5.0.Qt5.7.0
-    - QBS_VERSION=qbs:1.5.1.Qt5.7.0
+    - QBS_VERSION=qbs:1.7.2.Qt5.7.0
+    - QBS_VERSION=qbs:1.7.2.Qt5.7.1
 
 addons:
   apt:
@@ -26,5 +25,5 @@ before_script:
 script:
   - ${SCRIPTS_DIR}/build_in_docker.sh
   - tree -L 5 ${INSTALL_DIR}
-  - docker run --rm -v ${INSTALL_DIR}:/fsim -v ${SCRIPTS_DIR}:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fsim/install/${APP_DIR_NAME}/${APP_NAME} -t 55 -o /fsim/install/${APP_DIR_NAME}/screenshot.png
-  - tree -L 5 ${INSTALL_DIR}
+  # - docker run --rm -v ${INSTALL_DIR}:/fsim -v ${SCRIPTS_DIR}:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fsim/install/${APP_DIR_NAME}/${APP_NAME} -t 55 -o /fsim/install/${APP_DIR_NAME}/screenshot.png
+  # - tree -L 5 ${INSTALL_DIR}

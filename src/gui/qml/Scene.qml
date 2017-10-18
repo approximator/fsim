@@ -22,7 +22,7 @@ Entity {
         aspectRatio: width / height
     }
 
-    FirstPersonCameraController { camera: camera }
+    OrbitCameraController { camera: camera }
 
     components: [
         RenderSettings {
@@ -47,6 +47,8 @@ Entity {
             point = world.addObject("Sphere", Qt.vector3d(4, 5.94, 5))
             point = world.addObject("Sphere", Qt.vector3d(-2, -10, 1))
             point = world.addObject("Sphere", Qt.vector3d(2, -10, 1))
+            point = world.addObject("Sphere", Qt.vector3d(2, -11, 2))
+            point = world.addObject("Sphere", Qt.vector3d(2, -12, 3))
 
             point = world.addObject("Obstacle", Qt.vector3d(0, -5, 0.5))
 

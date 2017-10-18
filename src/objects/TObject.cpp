@@ -22,39 +22,45 @@
 #include "TObject.h"
 
 #include <QDebug>
+#include <QtMath>
 
-TObject::TObject(const uint _id, const QVector3D &initialLocation, QObject *parent)
+TObject::TObject(const uint _id, const QVector3D &initialLocation,
+                 QObject *parent)
     : QObject(parent)
     , m_typeName("Object")
-    , m_point_id(_id)
+    , m_object_id(_id)
     , m_location(initialLocation)
     , m_mass(1.0)
-    , m_force()
     , m_engineForce(0, 0, 0)
     , m_speed(0, 0, 0)
     , m_acceleration(0, 0, 0)
     , m_criticalRadius(1)
     , m_acceptNewPoints(true)
+    , m_force(0, 0, 0)
     , m_visibleObjects()
 {
-    qDebug() << "Added point [" << point_id() << "]: " << location();
+    qDebug() << "Added point [" << object_id() << "]: " << location();
 }
 
 TObject::~TObject()
 {
-    qDebug() << "Deleted point: " << point_id();
+    qDebug() << "Deleted point: " << object_id();
 }
 
-void TObject::set_acceleration(const qreal _x, const qreal _y)
+void TObject::computeActingForces()
 {
-    m_acceleration.setX(_x);
-    m_acceleration.setY(_y);
-}
+    auto resultingForce = engineForce();
 
-void TObject::set_speed(const qreal _x, const qreal _y)
-{
-    m_speed.setX(_x);
-    m_speed.setY(_y);
+    for (const auto &obj : m_visibleObjects) {
+        const auto distance = location().distanceToPoint(obj->location());             // distance
+        const auto forceDirection = (obj->location() - location()).normalized();       // direction
+        const auto crSum = (criticalRadius() + obj->criticalRadius());                 // distance between objects
+        const auto attractiveForce = mass() * obj->mass() / qPow(distance, 2);         // mi * mj / d^2
+        const auto repulsiveForce = crSum * mass() * obj->mass() / qPow(distance, 3);  // Rcr * mi * mj / d^3
+        const auto forceMagnitude = (attractiveForce - repulsiveForce) * 100;          // TODO: gravity
+        resultingForce += forceDirection * forceMagnitude;                             // Fi = Fi + Fij
+    }
+    set_force(resultingForce);
 }
 
 void TObject::addVisibleObject(TObject *point)
@@ -71,4 +77,21 @@ const QList<TObject *> &TObject::visibleObjects() const
 void TObject::clearVisibleObjectsList()
 {
     m_visibleObjects.clear();
+}
+
+QVector3D TObject::force()
+{
+    computeActingForces();
+    return m_force;
+}
+
+bool TObject::set_force(const QVector3D &newForce)
+{
+    if (m_force != newForce) {
+        m_force = newForce;
+        emit forceChanged();
+        return true;
+    } else {
+        return false;
+    }
 }
