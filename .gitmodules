@@ -1,9 +1,6 @@
-[submodule "modules/Qt-Super-Macros"]
-	path = modules/Qt-Super-Macros
-	url = https://github.com/approximator/Qt-Super-Macros.git
-[submodule "modules/Qt-QML-Models"]
-	path = modules/Qt-QML-Models
-	url = https://github.com/approximator/Qt-QML-Models.git
-[submodule "modules/Qt-Qbs-Application"]
-	path = modules/Qt-Qbs-Application
-	url = https://github.com/approximator/Qt-Qbs-Application.git
+[submodule "submodules/glfw"]
+	path = submodules/glfw
+	url = https://github.com/glfw/glfw
+[submodule "submodules/glm"]
+	path = submodules/glm
+	url = https://github.com/g-truc/glm.git
