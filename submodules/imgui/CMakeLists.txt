@@ -8,4 +8,4 @@ add_library(imgui
 )
 target_include_directories(imgui PUBLIC .)
 target_compile_definitions(imgui PRIVATE "-DIMGUI_IMPL_OPENGL_LOADER_GLAD")
-target_link_libraries(imgui PRIVATE glad)
+target_link_libraries(imgui PRIVATE glad glfw)

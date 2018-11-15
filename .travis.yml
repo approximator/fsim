@@ -1,29 +1,33 @@
 language: cpp
 
-services:
-  - docker
-
 env:
-    - BUILD_VARIANT=debug
-    - BUILD_VARIANT=release
-    - QBS_VERSION=qbs:1.7.2.Qt5.7.0
-    - QBS_VERSION=qbs:1.7.2.Qt5.7.1
+    - BUILD_VARIANT=Debug
+    - BUILD_VARIANT=Release
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
-      - p7zip-full
-      - tree
+            - wget
+            - make
+            - mesa-common-dev
+            - libglu1-mesa-dev
+            - xorg-dev
+            - gcc-8
+            - g++-8
 
-before_script:
-  - export APP_DIR_NAME=Forces_Simulation
-  - export APP_NAME=fsim
-  - export SRC_DIR=${TRAVIS_BUILD_DIR}
-  - export INSTALL_DIR=/tmp/fsim/docker
-  - export SCRIPTS_DIR=${SRC_DIR}/modules/Qt-Qbs-Application/scripts
+before_install:
+      # cmake 3.12
+    - |
+      travis_retry wget -q https://cmake.org/files/v3.12/cmake-3.12.3-Linux-x86_64.sh
+      sh cmake-3.12.3-Linux-x86_64.sh --skip-license
+    - export PATH=$TRAVIS_BUILD_DIR/bin:$PATH
 
 script:
-  - ${SCRIPTS_DIR}/build_in_docker.sh
-  - tree -L 5 ${INSTALL_DIR}
-  # - docker run --rm -v ${INSTALL_DIR}:/fsim -v ${SCRIPTS_DIR}:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fsim/install/${APP_DIR_NAME}/${APP_NAME} -t 55 -o /fsim/install/${APP_DIR_NAME}/screenshot.png
-  # - tree -L 5 ${INSTALL_DIR}
+  - mkdir build
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE:STRING=$BUILD_VARIANT -DCMAKE_CXX_COMPILER:STRING=g++-8 -DCMAKE_C_COMPILER:STRING=gcc-8 -DCMAKE_INSTALL_PREFIX:STRING=$TRAVIS_BUILD_DIR/install
+  - cmake --build . --target fsim
+  - cmake --build . --target install
+  - ls -lah $TRAVIS_BUILD_DIR/install
